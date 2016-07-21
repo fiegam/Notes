@@ -1,4 +1,5 @@
-﻿using Owin;
+﻿using Microsoft.Owin.Extensions;
+using Owin;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,7 @@ namespace Notes.WebApi
         public void Configuration(IAppBuilder app)
         {
             app.UseNancy();
+            app.UseStageMarker(PipelineStage.MapHandler);
         }
     }
 }
