@@ -12,7 +12,7 @@ namespace Notes.Mobile
     {
         public App()
         {
-            MainPage = new Main();
+            MainPage = new MainPage();
 
         }
 

@@ -15,12 +15,19 @@ namespace Notes.WebApi.Modules
 
         private async Task<List<Note>> GetNotes(dynamic parameters)
         {
-            return new List<Note> { new Note
+            var notes = new List<Note>();
+
+            for (int i = 0; i < 50; i++)
             {
-                Title = "note title",
-                Body = "body",
-                Id = Guid.NewGuid()
-            } };
+                notes.Add(new Note
+                {
+                    Title = "note title" + i,
+                    Body = "body",
+                    Id = Guid.NewGuid()
+                });
+            };
+
+            return notes;
         }
     }
 }
