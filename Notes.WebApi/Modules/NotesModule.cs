@@ -22,7 +22,7 @@ namespace Notes.WebApi.Modules
                 notes.Add(new Note
                 {
                     Title = "note title" + i,
-                    Body = "body",
+                    Body = "body " + i,
                     Id = Guid.NewGuid()
                 });
             };

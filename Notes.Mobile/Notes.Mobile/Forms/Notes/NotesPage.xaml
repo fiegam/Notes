@@ -2,13 +2,13 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:Notes.Mobile;assembly=Notes.Mobile"
-             x:Class="Notes.Mobile.Forms.MainPage"
+             x:Class="Notes.Mobile.Forms.Notes.NotesPage"
              Title="Notes">
-  <ContentPage.BindingContext>
-    <local:Forms.MainPageViewModel/>
-  </ContentPage.BindingContext>
-  
-  <ListView x:Name="NotesView" ItemsSource="{Binding Notes}">
+  <ContentPage.ToolbarItems>
+    <ToolbarItem Name="Add" Command="{Binding AddNote}" Order="Primary" Priority="0" />
+  </ContentPage.ToolbarItems>
+
+  <ListView x:Name="NotesView" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}">
     <ListView.ItemTemplate>
       <DataTemplate>
         <TextCell Text="{Binding Title}"></TextCell>

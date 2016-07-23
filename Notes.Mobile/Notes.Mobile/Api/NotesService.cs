@@ -2,32 +2,30 @@
 using Notes.Mobile.Model;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Notes.Mobile.Api
 {
-    public class NotesService
+    public class NotesService : INotesService
     {
 #if hardware
-         private const string BaseUrl = "http://192.168.5.18/Notes.WebApi/";
+        private const string BaseUrl = "http://192.168.5.18/Notes.WebApi/";
 #else
         private const string BaseUrl = "http://192.168.227.128/Notes.WebApi/";
 #endif
-        HttpClient client;
+        private HttpClient client;
 
         public NotesService()
         {
             client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            
+
             client.MaxResponseContentBufferSize = 256000;
         }
 
-        public async  Task<List<Note>> GetNotes()
+        public async Task<List<Note>> GetNotes()
         {
             var uri = new Uri(BaseUrl + "notes");
 
@@ -37,12 +35,22 @@ namespace Notes.Mobile.Api
                 var content = await response.Content.ReadAsStringAsync();
                 var result = JsonConvert.DeserializeObject<List<Note>>(content);
                 return result;
-            }else
+            }
+            else
             {
                 var message = await response.Content.ReadAsStringAsync();
                 throw new Exception("API exception: " + message);
             }
         }
 
+        public async Task Save(Note note)
+        {
+            //not implemented
+        }
+
+        public async Task<Note> Get(Guid noteId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
