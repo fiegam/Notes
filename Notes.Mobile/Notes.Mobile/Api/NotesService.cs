@@ -12,7 +12,11 @@ namespace Notes.Mobile.Api
 {
     public class NotesService
     {
+#if hardware
+         private const string BaseUrl = "http://192.168.5.18/Notes.WebApi/";
+#else
         private const string BaseUrl = "http://192.168.227.128/Notes.WebApi/";
+#endif
         HttpClient client;
 
         public NotesService()
