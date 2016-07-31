@@ -4,6 +4,19 @@
              x:Class="Notes.Mobile.Forms.NoteDetails.NoteDetailsPage"
              xmlns:local="clr-namespace:Notes.Mobile;assembly=Notes.Mobile"
              Title="Note">
-  <Label Text="{Binding Note.Title}"></Label>
-  <Label Text="{Binding Note.Body}"></Label>
+  <!--<ContentPage.Resources>
+    <ResourceDictionary>
+      <local:Converters.InverseBooleanConverter x:Key="cnvInvert"></local:Converters.InverseBooleanConverter>
+    </ResourceDictionary>
+  </ContentPage.Resources>-->
+  
+  <StackLayout Padding="15">
+    <Label Text="Title"></Label>
+    <!--<Label Text="{Binding Note.Title}" IsVisible="{Binding TitleEditing, Converter={StaticResource cnvInvert}}"></Label>-->
+    <Entry Text="{Binding Note.Title}" IsVisible="{Binding TitleEditing}"></Entry>
+    <Label Text="Body"></Label>
+    <!--<Label Text="{Binding Note.Body}" IsVisible="{Binding BodyEditing, Converter={StaticResource cnvInvert}}"></Label>-->
+    <Editor Text="{Binding Note.Body}" IsVisible="{Binding BodyEditing}"></Editor>
+    <Button Text="Save" Command="{Binding SaveNote}"></Button>
+  </StackLayout>
 </ContentPage>

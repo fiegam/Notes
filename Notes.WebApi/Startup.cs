@@ -1,9 +1,6 @@
 ﻿using Microsoft.Owin.Extensions;
+using Notes.WebApi.AppStart;
 using Owin;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 
 namespace Notes.WebApi
 {
@@ -11,7 +8,10 @@ namespace Notes.WebApi
     {
         public void Configuration(IAppBuilder app)
         {
-            app.UseNancy();
+            app.UseNancy(new Nancy.Owin.NancyOptions()
+            {
+                Bootstrapper = new NotesBootstrapper()
+            });
             app.UseStageMarker(PipelineStage.MapHandler);
         }
     }

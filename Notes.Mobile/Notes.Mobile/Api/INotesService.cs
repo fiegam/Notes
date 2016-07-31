@@ -9,6 +9,6 @@ namespace Notes.Mobile.Api
     {
         Task<Note> Get(Guid noteId);
         Task<List<Note>> GetNotes();
-        Task Save(Note note);
+        Task<Note> Save(Note note);
     }
 }

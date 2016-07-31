@@ -2,7 +2,9 @@
 using Notes.Mobile.Api;
 using Notes.Mobile.Model;
 using PropertyChanged;
+using System;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
 namespace Notes.Mobile.Forms.NoteDetails
 {
@@ -14,6 +16,7 @@ namespace Notes.Mobile.Forms.NoteDetails
         public NoteDetailsPageModel()
         {
             _notesService = new NotesService();
+            Note = new Note();
         }
 
         public Note Note { get; set; }
@@ -37,9 +40,22 @@ namespace Notes.Mobile.Forms.NoteDetails
             }
         }
 
+        public bool TitleEditing { get; set; } = true;
+        public bool BodyEditing { get; set; } = true;
+
         private void Sync()
         {
             //todo implement
+        }
+        
+        public Command SaveNote
+        {
+            get
+            {
+                return new Command(async () => {
+                    await _notesService.Save(Note);
+                });
+            }
         }
     }
 }

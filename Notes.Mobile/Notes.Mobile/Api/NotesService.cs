@@ -1,10 +1,14 @@
 ﻿using Newtonsoft.Json;
+using Notes.Contract.Queries;
 using Notes.Mobile.Model;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Notes.Mobile.Infrastructure;
+using System.Linq;
+using Notes.Contract.Commands;
 
 namespace Notes.Mobile.Api
 {
@@ -33,8 +37,8 @@ namespace Notes.Mobile.Api
             if (response.IsSuccessStatusCode)
             {
                 var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<List<Note>>(content);
-                return result;
+                var result = JsonConvert.DeserializeObject<GetNotesQueryResult>(content);
+                return result.Notes.Select(x => x.MapTo<Mobile.Model.Note>()).ToList();
             }
             else
             {
@@ -43,9 +47,28 @@ namespace Notes.Mobile.Api
             }
         }
 
-        public async Task Save(Note note)
+        public async Task<Note> Save(Note note)
         {
-            //not implemented
+            var uri = new Uri(BaseUrl + "notes");
+            var command = new SaveNoteCommand()
+            {
+                Note = note.MapTo<Contract.Model.Note>()
+            };
+
+            var request = new StringContent(JsonConvert.SerializeObject(command));
+            request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+            var response = await client.PostAsync(uri, request);
+            if (response.IsSuccessStatusCode)
+            {
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<SaveNoteCommandResult>(content);
+                return result.Note.MapTo<Note>();
+            }
+            else
+            {
+                var message = await response.Content.ReadAsStringAsync();
+                throw new Exception("API exception: " + message);
+            }
         }
 
         public async Task<Note> Get(Guid noteId)

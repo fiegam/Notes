@@ -1,33 +1,41 @@
 ﻿using Nancy;
+using Nancy.ModelBinding;
+using Notes.Contract.Commands;
+using Notes.Contract.Queries;
+using Notes.Core.Infrastructure;
 using Notes.Core.Model;
-using System;
-using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Notes.WebApi.Modules
 {
     public class NotesModule : NancyModule
     {
-        public NotesModule() : base("notes")
+        private IHandlerFactory _queryHandlerFactory;
+
+        public NotesModule(IHandlerFactory queryHandlerFactory) : base("notes")
         {
-            Get("/", GetNotes);
+            _queryHandlerFactory = queryHandlerFactory;
+            Get("/", async (_, token) => await HandleQuery(this.Bind<GetNotesQuery>()));
+            Post("/", async (_,token) => await HandleCommand(this.Bind<SaveNoteCommand>()));
         }
 
-        private async Task<List<Note>> GetNotes(dynamic parameters)
+        private async Task<object> HandleQuery<TQuery>(TQuery query)
         {
-            var notes = new List<Note>();
+            var handler = _queryHandlerFactory.CreateQueryHandler<TQuery>();
 
-            for (int i = 0; i < 50; i++)
-            {
-                notes.Add(new Note
-                {
-                    Title = "note title" + i,
-                    Body = "body " + i,
-                    Id = Guid.NewGuid()
-                });
-            };
+            var result = await handler.HandleAsync(query);
 
-            return notes;
+            return result;
+        }
+
+        private async Task<object> HandleCommand<TCommand>(TCommand command)
+        {
+            var handler = _queryHandlerFactory.CreateCommandHandler<TCommand>();
+
+            var result = await handler.HandleAsync(command);
+
+            return result;
         }
     }
 }

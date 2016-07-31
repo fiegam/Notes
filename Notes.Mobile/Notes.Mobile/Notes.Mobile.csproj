@@ -47,6 +47,7 @@
     <Compile Include="Api\INotesService.cs" />
     <Compile Include="Api\NotesService.cs" />
     <Compile Include="App.cs" />
+    <Compile Include="Converters\InverseBoleanConverter.cs" />
     <Compile Include="Forms\Notes\NotesPage.xaml.cs">
       <DependentUpon>NotesPage.xaml</DependentUpon>
     </Compile>
@@ -54,12 +55,17 @@
     <Compile Include="Forms\NoteDetails\NoteDetailsPage.xaml.cs">
       <DependentUpon>NoteDetailsPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\NoteDetails\NoteDetailsViewModel.cs" />
+    <Compile Include="Forms\NoteDetails\NoteDetailsPageModel.cs" />
+    <Compile Include="Infrastructure\MappingExtension.cs" />
     <Compile Include="MainPage.cs" />
     <Compile Include="Model\Note.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="EmitMapper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="FreshIOC, Version=1.0.5977.25641, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FreshMvvm.2.1.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshIOC.dll</HintPath>
       <Private>True</Private>
@@ -108,6 +114,13 @@
   <ItemGroup>
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Notes.Contract\Notes.Contract.csproj">
+      <Project>{16302ed9-f186-4ac4-ad60-5f2487266745}</Project>
+      <Name>Notes.Contract</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.0.0.6482\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.0.0.6482\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
