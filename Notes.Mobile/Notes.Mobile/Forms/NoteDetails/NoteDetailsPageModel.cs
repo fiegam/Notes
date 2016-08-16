@@ -48,6 +48,28 @@ namespace Notes.Mobile.Forms.NoteDetails
             //todo implement
         }
         
+        public Command SaveTitle
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    await _notesService.UpdateTitle(Note.Id, Note.Title);
+                });
+            }
+        }
+
+        public Command SaveBody
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    await _notesService.UpdateBody(Note.Id, Note.Body);
+                });
+            }
+        }
+
         public Command SaveNote
         {
             get

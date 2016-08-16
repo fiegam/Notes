@@ -61,5 +61,17 @@ namespace Notes.Core.Repositories
         {
             await NotesCollection.InsertOneAsync(note);
         }
+
+        public async Task UpdateNote(Note note)
+        {
+            await NotesCollection.ReplaceOneAsync(NotesByIdFilter(note.Id),note);
+        }
+
+        public async Task<Note> GetNote(Guid id)
+        {
+            var note = (await NotesCollection.Find(NotesByIdFilter(id)).FirstOrDefaultAsync());
+
+            return note;
+        }
     }
 }

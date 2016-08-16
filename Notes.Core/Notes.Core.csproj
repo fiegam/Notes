@@ -54,6 +54,10 @@
       <HintPath>..\packages\Ninject.3.2.2.0\lib\net45-full\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\packages\NLog.4.3.6\lib\net45\NLog.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -66,15 +70,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommandHandlers\ICommandHandler.cs" />
+    <Compile Include="CommandHandlers\SetNoteBodyCommandHandler.cs" />
+    <Compile Include="CommandHandlers\SetNoteTitleCommandHandler.cs" />
     <Compile Include="CommandHandlers\SaveNoteCommandHandler.cs" />
     <Compile Include="Configuration\Configuration.cs" />
     <Compile Include="Configuration\IConfiguration.cs" />
     <Compile Include="Exceptions\NotFoundException.cs" />
     <Compile Include="Infrastructure\Extensions\MappingExtension.cs" />
+    <Compile Include="Infrastructure\ILogger.cs" />
     <Compile Include="Infrastructure\IQueryHandlerFactory.cs" />
+    <Compile Include="Infrastructure\LogProvider.cs" />
+    <Compile Include="Infrastructure\NlogLogger.cs" />
     <Compile Include="Infrastructure\QueryHandlerFactory.cs" />
     <Compile Include="Model\Note.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="QueryHandlers\GetNoteQueryHandler.cs" />
     <Compile Include="QueryHandlers\GetNotesQueryHandler.cs" />
     <Compile Include="QueryHandlers\IQueryHandler.cs" />
     <Compile Include="Repositories\INotesRepository.cs" />

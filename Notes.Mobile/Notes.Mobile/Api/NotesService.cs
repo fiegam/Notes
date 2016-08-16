@@ -1,79 +1,61 @@
-﻿using Newtonsoft.Json;
+﻿using Notes.Contract.Commands;
 using Notes.Contract.Queries;
+using Notes.Mobile.Infrastructure;
 using Notes.Mobile.Model;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Threading.Tasks;
-using Notes.Mobile.Infrastructure;
 using System.Linq;
-using Notes.Contract.Commands;
+using System.Threading.Tasks;
 
 namespace Notes.Mobile.Api
 {
-    public class NotesService : INotesService
+    public class NotesService : ApiServiceBase, INotesService
     {
-#if hardware
-        private const string BaseUrl = "http://192.168.5.18/Notes.WebApi/";
-#else
-        private const string BaseUrl = "http://192.168.227.128/Notes.WebApi/";
-#endif
-        private HttpClient client;
-
-        public NotesService()
-        {
-            client = new HttpClient();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-            client.MaxResponseContentBufferSize = 256000;
-        }
-
         public async Task<List<Note>> GetNotes()
         {
-            var uri = new Uri(BaseUrl + "notes");
+            var result = await Get<GetNotesQueryResult>("notes");
 
-            var response = await client.GetAsync(uri);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<GetNotesQueryResult>(content);
-                return result.Notes.Select(x => x.MapTo<Mobile.Model.Note>()).ToList();
-            }
-            else
-            {
-                var message = await response.Content.ReadAsStringAsync();
-                throw new Exception("API exception: " + message);
-            }
+            return result.Notes.Select(x => x.MapTo<Mobile.Model.Note>()).ToList();
         }
 
         public async Task<Note> Save(Note note)
         {
-            var uri = new Uri(BaseUrl + "notes");
             var command = new SaveNoteCommand()
             {
                 Note = note.MapTo<Contract.Model.Note>()
             };
 
-            var request = new StringContent(JsonConvert.SerializeObject(command));
-            request.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-            var response = await client.PostAsync(uri, request);
-            if (response.IsSuccessStatusCode)
-            {
-                var content = await response.Content.ReadAsStringAsync();
-                var result = JsonConvert.DeserializeObject<SaveNoteCommandResult>(content);
-                return result.Note.MapTo<Note>();
-            }
-            else
-            {
-                var message = await response.Content.ReadAsStringAsync();
-                throw new Exception("API exception: " + message);
-            }
+            var result = await Post<SaveNoteCommand, SaveNoteCommandResult>("notes", command);
+            return result.Note.MapTo<Note>();
         }
 
         public async Task<Note> Get(Guid noteId)
         {
-            throw new NotImplementedException();
+            var result = await Get<GetNoteQueryResult>("notes/" + noteId);
+
+            return result.Note.MapTo<Mobile.Model.Note>();
+        }
+
+        public async Task UpdateTitle(Guid id, string title)
+        {
+            var command = new SetNoteTitleCommand
+            {
+                NoteId = id,
+                Title = title
+            };
+
+            await Put<SetNoteTitleCommand>("notes/title", command);
+        }
+
+        public async Task UpdateBody(Guid id, string body)
+        {
+            var command = new SetNoteBodyCommand
+            {
+                NoteId = id,
+                Body = body
+            };
+
+            await Put<SetNoteBodyCommand>("notes/body", command);
         }
     }
 }

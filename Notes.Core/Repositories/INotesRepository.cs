@@ -7,9 +7,11 @@ namespace Notes.Core.Repositories
 {
     public interface INotesRepository
     {
+        Task<Note> GetNote(Guid id);
         Task<IEnumerable<Note>> GetNotes();
         Task UpdateBody(Guid id, string body);
         Task UpdateTitle(Guid id, string title);
         Task SaveNote(Note note);
+        Task UpdateNote(Note note);
     }
 }

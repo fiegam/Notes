@@ -44,6 +44,7 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Api\ApiServiceBase.cs" />
     <Compile Include="Api\INotesService.cs" />
     <Compile Include="Api\NotesService.cs" />
     <Compile Include="App.cs" />
@@ -57,6 +58,7 @@
     </Compile>
     <Compile Include="Forms\NoteDetails\NoteDetailsPageModel.cs" />
     <Compile Include="Infrastructure\MappingExtension.cs" />
+    <Compile Include="Infrastructure\XamlImprovements\UnfocusedAttached.cs" />
     <Compile Include="MainPage.cs" />
     <Compile Include="Model\Note.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

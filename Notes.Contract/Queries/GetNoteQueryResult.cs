@@ -1,8 +1,8 @@
 ﻿using Notes.Contract.Model;
 
-namespace Notes.Contract.Commands
+namespace Notes.Contract.Queries
 {
-    public class SaveNoteCommandResult
+    public class GetNoteQueryResult
     {
         public Note Note { get; set; }
     }

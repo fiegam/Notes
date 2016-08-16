@@ -16,5 +16,6 @@ namespace Notes.WebApi.AppStart
             .BindDefaultInterfaces());
 
         }
+
     }
 }
