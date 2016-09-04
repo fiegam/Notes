@@ -1,11 +1,14 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Notes.Contract.Commands
 {
     public class SetNoteTitleCommand
     {
-        public Guid NoteId { get; set; }
+        [Required]
+        public Guid? NoteId { get; set; }
 
+        [Required]
         public string Title { get; set; }
     }
 }

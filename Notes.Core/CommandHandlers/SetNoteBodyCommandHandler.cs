@@ -15,7 +15,7 @@ namespace Notes.Core.CommandHandlers
 
         public async Task<object> HandleAsync(SetNoteBodyCommand command)
         {
-            await _notesRepository.UpdateBody(command.NoteId, command.Body);
+            await _notesRepository.UpdateBody(command.NoteId.Value, command.Body);
 
             return null;
         }

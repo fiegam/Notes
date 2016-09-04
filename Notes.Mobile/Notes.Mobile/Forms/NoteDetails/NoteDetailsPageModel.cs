@@ -54,7 +54,10 @@ namespace Notes.Mobile.Forms.NoteDetails
             {
                 return new Command(async () =>
                 {
-                    await _notesService.UpdateTitle(Note.Id, Note.Title);
+                    if (!Note.IsNew)
+                    {
+                        await _notesService.UpdateTitle(Note.Id, Note.Title);
+                    }
                 });
             }
         }
@@ -65,7 +68,10 @@ namespace Notes.Mobile.Forms.NoteDetails
             {
                 return new Command(async () =>
                 {
-                    await _notesService.UpdateBody(Note.Id, Note.Body);
+                    if (!Note.IsNew)
+                    {
+                        await _notesService.UpdateBody(Note.Id, Note.Body);
+                    }
                 });
             }
         }

@@ -104,6 +104,10 @@
       <HintPath>..\packages\Nancy.Owin.2.0.0-barneyrubble\lib\net452\Nancy.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nancy.Validation.DataAnnotations, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Validation.DataAnnotations.2.0.0-barneyrubble\lib\net452\Nancy.Validation.DataAnnotations.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
       <Private>True</Private>
@@ -171,13 +175,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Infrastructure\ErrorStatusCodeHandler.cs" />
-    <Compile Include="Modules\async.cs" />
     <Compile Include="Modules\InfoModule.cs" />
     <Compile Include="Modules\NotesModule.cs" />
     <Compile Include="Modules\NotesModuleBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
-    <Compile Include="AppStart\NancyBootstrapper.cs" />
+    <Compile Include="AppStart\NotesBootstrapper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Notes.Contract\Notes.Contract.csproj">

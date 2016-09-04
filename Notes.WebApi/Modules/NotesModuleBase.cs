@@ -1,4 +1,5 @@
 ﻿using Nancy;
+using Nancy.Validation;
 using Ninject;
 using Notes.Core.Infrastructure;
 using System;
@@ -17,6 +18,13 @@ namespace Notes.WebApi.Modules
 
         protected async Task<object> HandleQuery<TQuery>(TQuery query)
         {
+            var validationResult = this.Validate(query);
+
+            if (!validationResult.IsValid)
+            {
+                return Negotiate.WithModel(validationResult).WithStatusCode(HttpStatusCode.BadRequest);
+            }
+
             var handler = QueryHandlerFactory.CreateQueryHandler<TQuery>();
 
             var result = await handler.HandleAsync(query);
@@ -28,6 +36,12 @@ namespace Notes.WebApi.Modules
         {
             try
             {
+                var validationResult = this.Validate(command);
+
+                if (!validationResult.IsValid)
+                {
+                    return Negotiate.WithModel(validationResult).WithStatusCode(HttpStatusCode.BadRequest);
+                }
                 var handler = QueryHandlerFactory.CreateCommandHandler<TCommand>();
 
                 var result = await handler.HandleAsync(command);

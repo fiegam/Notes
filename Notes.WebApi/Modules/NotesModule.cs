@@ -9,7 +9,7 @@ namespace Notes.WebApi.Modules
     {
         public NotesModule() : base("notes")
         {
-            Get("/", async (_, token) => await HandleQuery(this.Bind<GetNotesQuery>()));
+            Get("/", async (_, token) => await HandleQuery(new GetNotesQuery()));
             Get("/{Id}", async (_, token) =>  await GetNote(_));
             Post("/", async (_, token) => await HandleCommand(this.Bind<SaveNoteCommand>()));
             Put("/title", async (_, token) => await HandleCommand(this.Bind<SetNoteTitleCommand>()));

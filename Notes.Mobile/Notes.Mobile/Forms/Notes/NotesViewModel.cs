@@ -65,6 +65,7 @@ namespace Notes.Mobile.Forms.Notes
             {
                 return new Command(async () => {
                     await CoreMethods.PushPageModel<NoteDetailsPageModel>();
+                    await Refresh();
                 });
             }
         }
@@ -75,6 +76,7 @@ namespace Notes.Mobile.Forms.Notes
             {
                 return new Command<Note>(async (note) => {
                     await CoreMethods.PushPageModel<NoteDetailsPageModel>(note);
+                    await Refresh();
                 });
             }
         }

@@ -34,9 +34,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <!-- A reference to the entire .NET Framework is automatically included -->
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="Commands\SaveNoteCommand.cs" />
     <Compile Include="Commands\SaveNoteCommandResult.cs" />
     <Compile Include="Commands\SetNoteBodyCommand.cs" />
@@ -47,6 +44,11 @@
     <Compile Include="Queries\GetNoteQueryResult.cs" />
     <Compile Include="Queries\GetNotesQuery.cs" />
     <Compile Include="Queries\GetNotesQueryResult.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.ComponentModel.DataAnnotations">
+      <HintPath>..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v4.6.1\System.ComponentModel.DataAnnotations.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

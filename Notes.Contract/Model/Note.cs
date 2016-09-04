@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Notes.Contract.Model
 {
     public class Note
     {
-        public Guid Id { get; set; }
+        [Required]
+        public Guid? Id { get; set; }
 
+        [Required]
         public string Title { get; set; }
 
         public string Body { get; set; }

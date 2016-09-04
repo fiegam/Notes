@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace Notes.Contract.Commands
 {
     public class SetNoteBodyCommand
     {
-        public Guid NoteId { get; set; }
+        [Required]
+        public Guid? NoteId { get; set; }
 
         public string Body { get; set; }
     }

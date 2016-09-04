@@ -1,8 +1,6 @@
 ﻿using Nancy.Bootstrappers.Ninject;
 using Ninject;
 using Ninject.Extensions.Conventions;
-using Notes.Contract.Queries;
-using Notes.Core.QueryHandlers;
 
 namespace Notes.WebApi.AppStart
 {
@@ -14,8 +12,6 @@ namespace Notes.WebApi.AppStart
             existingContainer.Bind(c => c.FromAssembliesMatching("Notes.*")
             .SelectAllClasses()
             .BindDefaultInterfaces());
-
         }
-
     }
 }

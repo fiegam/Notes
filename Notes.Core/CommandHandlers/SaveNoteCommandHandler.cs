@@ -19,7 +19,7 @@ namespace Notes.Core.CommandHandlers
         {
             var note = command.Note.MapTo<Note>();
             
-            var existingNote = _notesRepository.GetNote(note.Id);
+            var existingNote = await _notesRepository.GetNote(note.Id);
             if (existingNote != null)
             {
                 await _notesRepository.UpdateNote(note);
