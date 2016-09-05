@@ -3,12 +3,7 @@ using Notes.Mobile.Api;
 using Notes.Mobile.Forms.NoteDetails;
 using Notes.Mobile.Model;
 using PropertyChanged;
-using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -18,20 +13,27 @@ namespace Notes.Mobile.Forms.Notes
     public class NotesPageModel : FreshBasePageModel
     {
         private NotesService _notesService;
-        
 
-        public ObservableCollection<Note> Notes { get; set; }
+        public ObservableCollection<Note> Notes { get; }
 
         public NotesPageModel()
         {
             _notesService = new NotesService();
 
-            Refresh();
+            this.Notes = new ObservableCollection<Note>();
+            this.Initialization = Refresh();
         }
+
+        public Task Initialization { get; }
 
         public async Task Refresh()
         {
-            Notes = new ObservableCollection<Note>(await _notesService.GetNotes());
+            var notes = await _notesService.GetNotes();
+            Notes.Clear();
+            foreach (var note in notes)
+            {
+                Notes.Add(note);
+            }
         }
 
         public override void ReverseInit(object value)
@@ -43,7 +45,7 @@ namespace Notes.Mobile.Forms.Notes
             }
         }
 
-        Note _selectedNote;
+        private Note _selectedNote;
 
         public Note SelectedNote
         {
@@ -63,7 +65,8 @@ namespace Notes.Mobile.Forms.Notes
         {
             get
             {
-                return new Command(async () => {
+                return new Command(async () =>
+                {
                     await CoreMethods.PushPageModel<NoteDetailsPageModel>();
                     await Refresh();
                 });
@@ -74,7 +77,8 @@ namespace Notes.Mobile.Forms.Notes
         {
             get
             {
-                return new Command<Note>(async (note) => {
+                return new Command<Note>(async (note) =>
+                {
                     await CoreMethods.PushPageModel<NoteDetailsPageModel>(note);
                     await Refresh();
                 });

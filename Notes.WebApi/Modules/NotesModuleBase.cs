@@ -9,6 +9,8 @@ namespace Notes.WebApi.Modules
 {
     public abstract class NotesModuleBase : NancyModule
     {
+        private static ILogger Logger = LogProvider.GetLogger();
+
         protected NotesModuleBase(string path) : base(path)
         {
         }
@@ -49,6 +51,7 @@ namespace Notes.WebApi.Modules
                 return result;
             }catch(Exception ex)
             {
+                Logger.Error($"Exception when handling {typeof(TCommand)}", ex);
                 throw;
             }
         }

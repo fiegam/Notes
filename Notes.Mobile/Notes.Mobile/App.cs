@@ -9,7 +9,8 @@ namespace Notes.Mobile
     {
         public App()
         {
-            MainPage = new MainPage(this);
+            //MainPage = new MainPage(this);
+            LoadNotes();
         }
 
         public void LoadNotes()
@@ -33,5 +34,7 @@ namespace Notes.Mobile
         {
             // Handle when your app resumes
         }
+
+        
     }
 }

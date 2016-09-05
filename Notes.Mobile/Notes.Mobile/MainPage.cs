@@ -22,5 +22,6 @@ namespace Notes.Mobile
             };
             this.Content = list;
         }
+         
     }
 }
