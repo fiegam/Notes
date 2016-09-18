@@ -42,11 +42,18 @@ namespace Notes.WebApi.Tests.Infrastructure
         public async Task Put<TCommandType>(string path, TCommandType command)
         {
             var response = await Browser.Put(path, with =>
-             {
-                 with.Header("Accept", "application/json");
-                 with.Header("Content-type", "application/json");
-                 with.JsonBody(command);
-             });
+            {
+                with.Header("Accept", "application/json");
+                with.Header("Content-type", "application/json");
+                with.JsonBody(command);
+            });
+
+            Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
+        }
+
+        public async Task Delete(string path)
+        {
+            var response = await Browser.Delete(path);
 
             Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
         }

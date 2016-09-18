@@ -70,8 +70,16 @@ namespace Notes.Core.Repositories
         public async Task<Note> GetNote(Guid id)
         {
             var note = (await NotesCollection.Find(NotesByIdFilter(id)).FirstOrDefaultAsync());
-
+            if(note == null)
+            {
+                throw new NotFoundException($"Note {id} was not found.");
+            }
             return note;
+        }
+
+        public async Task Delete(Guid noteId)
+        {
+            await NotesCollection.DeleteOneAsync(NotesByIdFilter(noteId));
         }
     }
 }

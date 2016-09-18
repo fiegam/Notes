@@ -7,12 +7,16 @@
   <ContentPage.ToolbarItems>
     <ToolbarItem Name="Add" Command="{Binding AddNote}" Order="Primary" Priority="0" />
   </ContentPage.ToolbarItems>
-
-  <ListView x:Name="NotesView" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}">
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <TextCell Text="{Binding Title}"></TextCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-  </ListView>
+  <Grid>
+    <Grid.RowDefinitions>
+      <RowDefinition Height="*" />
+    </Grid.RowDefinitions>
+    <ListView x:Name="NotesView" ItemsSource="{Binding Notes}" SelectedItem="{Binding SelectedNote}">
+      <ListView.ItemTemplate>
+        <DataTemplate>
+          <TextCell Text="{Binding Title}"></TextCell>
+        </DataTemplate>
+      </ListView.ItemTemplate>
+    </ListView>
+  </Grid>
 </ContentPage>

@@ -12,13 +12,11 @@
   
   <StackLayout Padding="15">
     <Label Text="Title"></Label>
-    <!--<Label Text="{Binding Note.Title}" IsVisible="{Binding TitleEditing, Converter={StaticResource cnvInvert}}"></Label>-->
-    <Entry Text="{Binding Note.Title}" IsVisible="{Binding TitleEditing}" local:UnfocusedAttached.Command="{Binding SaveTitle}">
-      
+    <Entry Text="{Binding Note.Title}" local:UnfocusedAttached.Command="{Binding SaveTitle}">
     </Entry>
     <Label Text="Body"></Label>
-    <!--<Label Text="{Binding Note.Body}" IsVisible="{Binding BodyEditing, Converter={StaticResource cnvInvert}}"></Label>-->
-    <Editor Text="{Binding Note.Body}" IsVisible="{Binding BodyEditing}" local:UnfocusedAttached.Command="{Binding SaveBody}"></Editor>
+    <Editor Text="{Binding Note.Body}" local:UnfocusedAttached.Command="{Binding SaveBody}"></Editor>
     <Button Text="Save" Command="{Binding SaveNote}"></Button>
+    <Button Text="Delete" Command="{Binding Delete}"></Button>
   </StackLayout>
 </ContentPage>

@@ -52,6 +52,31 @@ namespace Notes.Mobile.Api
             }
         }
 
+        protected async Task Delete(string path)
+        {
+            try
+            {
+                var uri = new Uri(BaseUrl + path);
+
+                var response = await client.DeleteAsync(uri);
+                if (response.IsSuccessStatusCode)
+                {
+                    return;
+                }
+                else
+                {
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new Exception("API exception: " + message);
+                }
+            }
+            catch (Exception ex)
+            {
+                //todo handle
+                throw;
+            }
+        }
+
+
         protected async Task<TResult> Post<TCommand, TResult>(string path, TCommand command)
         {
             try { 

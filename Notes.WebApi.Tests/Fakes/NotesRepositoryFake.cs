@@ -40,16 +40,19 @@ namespace Notes.WebApi.Tests.Fakes
 
         public async Task UpdateNote(Note note)
         {
-            await Task.Run(() =>
-            {
-                Notes.RemoveAll(x => x.Id == note.Id);
-                Notes.Add(note);
-            });
+            var dbNote = await GetNote(note.Id);
+            dbNote.Title = note.Title;
+            dbNote.Body = note.Body;
         }
 
         public async Task UpdateTitle(Guid id, string title)
         {
             (await GetNote(id)).Title = title;
+        }
+
+        public async Task Delete(Guid noteId)
+        {
+            await Task.Run(() => Notes.RemoveAll(x => x.Id == noteId));
         }
     }
 }

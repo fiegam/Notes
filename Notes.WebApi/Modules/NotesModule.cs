@@ -11,9 +11,10 @@ namespace Notes.WebApi.Modules
         {
             Get("/", async (_, token) => await HandleQuery(new GetNotesQuery()));
             Get("/{Id}", async (_, token) =>  await GetNote(_));
-            Post("/", async (_, token) => await HandleCommand(this.Bind<SaveNoteCommand>()));
+            Put("/", async (_, token) => await HandleCommand(this.Bind<SaveNoteCommand>()));
             Put("/title", async (_, token) => await HandleCommand(this.Bind<SetNoteTitleCommand>()));
             Put("/body", async (_, token) => await HandleCommand(this.Bind<SetNoteBodyCommand>()));
+            Delete("/{id}", async (_, token) => await DeleteNote(_));
         }
 
         private async Task<object> GetNote(dynamic parameters)
@@ -24,6 +25,16 @@ namespace Notes.WebApi.Modules
             };
 
             return await HandleQuery(query);
-        } 
+        }
+
+        private async Task<object> DeleteNote(dynamic parameters)
+        {
+            var command = new DeleteNoteCommand
+            {
+                Id = parameters.Id
+            };
+
+            return await HandleCommand(command);
+        }
     }
 }

@@ -85,5 +85,21 @@ namespace Notes.Mobile.Forms.NoteDetails
                 });
             }
         }
+
+        public Command Delete
+        {
+            get
+            {
+                return new Command(async () =>
+                {
+                    var decision = await CoreMethods.DisplayActionSheet($"Are you sure you want to delete this note?", "Yes", "No");
+                    if (decision == "Yes")
+                    {
+                        await _notesService.Delete(Note.Id);
+                        await CoreMethods.PopPageModel();
+                    }
+                });
+            }
+        }
     }
 }

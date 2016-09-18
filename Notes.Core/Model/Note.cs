@@ -7,6 +7,11 @@ namespace Notes.Core.Model
 {
     public class Note
     {
+        public bool IsNew()
+        {
+            return Id == Guid.Empty;
+        }
+
         public Guid Id { get; set; }
 
         public string Title { get; set; }

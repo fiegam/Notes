@@ -11,16 +11,23 @@ namespace Notes.Mobile
     {
         public MainPage(App app)
         {
-            Title = "Select Sample";
-            var list = new ListView();
-            list.ItemsSource = new List<string> {
+            try
+            {
+                Title = "Select Sample";
+                var list = new ListView();
+                list.ItemsSource = new List<string> {
                 "Notes",
             };
-            list.ItemTapped += (object sender, ItemTappedEventArgs e) => {
-                if ((string)e.Item == "Notes")
-                    app.LoadNotes();
-            };
-            this.Content = list;
+                list.ItemTapped += (object sender, ItemTappedEventArgs e) =>
+                {
+                    if ((string)e.Item == "Notes")
+                        app.LoadNotes();
+                };
+                this.Content = list;
+            }catch(Exception ex)
+            {
+
+            }
         }
          
     }

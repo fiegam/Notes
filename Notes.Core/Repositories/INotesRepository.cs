@@ -13,5 +13,6 @@ namespace Notes.Core.Repositories
         Task UpdateTitle(Guid id, string title);
         Task SaveNote(Note note);
         Task UpdateNote(Note note);
+        Task Delete(Guid id);
     }
 }

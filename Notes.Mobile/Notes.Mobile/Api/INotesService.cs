@@ -12,5 +12,6 @@ namespace Notes.Mobile.Api
         Task<Note> Save(Note note);
         Task UpdateTitle(Guid id, string title);
         Task UpdateBody(Guid id, string body);
+        Task Delete(Guid id);
     }
 }

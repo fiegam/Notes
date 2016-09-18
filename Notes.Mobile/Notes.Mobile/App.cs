@@ -1,6 +1,7 @@
 ﻿using FreshMvvm;
 using Notes.Mobile.Forms.NoteDetails;
 using Notes.Mobile.Forms.Notes;
+using System;
 using Xamarin.Forms;
 
 namespace Notes.Mobile
@@ -9,15 +10,21 @@ namespace Notes.Mobile
     {
         public App()
         {
-            //MainPage = new MainPage(this);
-            LoadNotes();
+            MainPage = new MainPage(this);
+            //LoadNotes();
         }
 
         public void LoadNotes()
         {
-            var page = FreshPageModelResolver.ResolvePageModel<NotesPageModel>();
-            var notesContainer = new FreshNavigationContainer(page);
-            MainPage = notesContainer;
+            try
+            {
+                var page = FreshPageModelResolver.ResolvePageModel<NotesPageModel>();
+                var notesContainer = new FreshNavigationContainer(page);
+                MainPage = notesContainer;
+            }catch(Exception ex)
+            {
+                
+            }
         }
 
         protected override void OnStart()

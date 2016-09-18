@@ -43,6 +43,15 @@
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'HardwareDebug|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\HardwareDebug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;hardware</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="Api\ApiServiceBase.cs" />
     <Compile Include="Api\INotesService.cs" />
@@ -52,7 +61,7 @@
     <Compile Include="Forms\Notes\NotesPage.xaml.cs">
       <DependentUpon>NotesPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\Notes\NotesViewModel.cs" />
+    <Compile Include="Forms\Notes\NotesPageModel.cs" />
     <Compile Include="Forms\NoteDetails\NoteDetailsPage.xaml.cs">
       <DependentUpon>NoteDetailsPage.xaml</DependentUpon>
     </Compile>
@@ -68,12 +77,12 @@
       <HintPath>..\..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FreshIOC, Version=1.0.5977.25641, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FreshMvvm.2.1.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshIOC.dll</HintPath>
+    <Reference Include="FreshIOC, Version=1.0.6071.17008, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FreshMvvm.2.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshIOC.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="FreshMvvm, Version=1.0.5977.25710, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\FreshMvvm.2.1.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshMvvm.dll</HintPath>
+    <Reference Include="FreshMvvm, Version=1.0.6071.17008, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FreshMvvm.2.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshMvvm.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">

@@ -32,7 +32,7 @@ namespace Notes.Mobile.Forms.Notes
             Notes.Clear();
             foreach (var note in notes)
             {
-                Notes.Add(note);
+               this.Notes.Add(note);
             }
         }
 

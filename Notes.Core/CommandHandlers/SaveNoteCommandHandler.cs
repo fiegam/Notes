@@ -2,6 +2,7 @@
 using Notes.Core.Infrastructure.Extensions;
 using Notes.Core.Model;
 using Notes.Core.Repositories;
+using System;
 using System.Threading.Tasks;
 
 namespace Notes.Core.CommandHandlers
@@ -18,17 +19,16 @@ namespace Notes.Core.CommandHandlers
         public async Task<object> HandleAsync(SaveNoteCommand command)
         {
             var note = command.Note.MapTo<Note>();
-            
-            var existingNote = await _notesRepository.GetNote(note.Id);
-            if (existingNote != null)
+            if (note.IsNew())
             {
-                await _notesRepository.UpdateNote(note);
+                note.Id = Guid.NewGuid();
+                await _notesRepository.SaveNote(note);
             }
             else
             {
-                await _notesRepository.SaveNote(note);
+                await _notesRepository.UpdateNote(note);
             }
-            
+
             return command.Note;
         }
     }

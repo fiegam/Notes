@@ -25,7 +25,7 @@ namespace Notes.Mobile.Api
                 Note = note.MapTo<Contract.Model.Note>()
             };
 
-            var result = await Post<SaveNoteCommand, SaveNoteCommandResult>("notes", command);
+            var result = await Put<SaveNoteCommand, SaveNoteCommandResult>("notes", command);
             return result.Note.MapTo<Note>();
         }
 
@@ -56,6 +56,11 @@ namespace Notes.Mobile.Api
             };
 
             await Put<SetNoteBodyCommand>("notes/body", command);
+        }
+
+        public async Task Delete(Guid id)
+        {
+            await base.Delete($"notes/{id}");
         }
     }
 }
