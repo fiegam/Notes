@@ -13,7 +13,7 @@ namespace Notes.Mobile
         {
             IoC.Init();
 
-            MainPage = new MainPage(this);
+           // MainPage = new MainPage(this);
             //LoadNotes();
         }
 
@@ -32,7 +32,7 @@ namespace Notes.Mobile
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            LoadNotes();
         }
 
         protected override void OnSleep()
