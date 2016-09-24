@@ -1,5 +1,6 @@
 ﻿using FreshMvvm;
 using Notes.Mobile.Api;
+using Notes.Mobile.Data;
 using Notes.Mobile.Model;
 using PropertyChanged;
 using System;
@@ -11,11 +12,11 @@ namespace Notes.Mobile.Forms.NoteDetails
     [ImplementPropertyChanged]
     public class NoteDetailsPageModel : FreshBasePageModel
     {
-        private NotesService _notesService;
+        private INotesData _notesData;
 
-        public NoteDetailsPageModel()
+        public NoteDetailsPageModel(INotesData notesData)
         {
-            _notesService = new NotesService();
+            _notesData = notesData;
             Note = new Note();
         }
 
@@ -23,7 +24,7 @@ namespace Notes.Mobile.Forms.NoteDetails
 
         public async Task Save()
         {
-            await _notesService.Save(Note);
+            _notesData.SaveOrUpdate(Note);
         }
 
         public override void Init(object initData)
@@ -48,40 +49,13 @@ namespace Notes.Mobile.Forms.NoteDetails
             //todo implement
         }
         
-        public Command SaveTitle
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    if (!Note.IsNew)
-                    {
-                        await _notesService.UpdateTitle(Note.Id, Note.Title);
-                    }
-                });
-            }
-        }
-
-        public Command SaveBody
-        {
-            get
-            {
-                return new Command(async () =>
-                {
-                    if (!Note.IsNew)
-                    {
-                        await _notesService.UpdateBody(Note.Id, Note.Body);
-                    }
-                });
-            }
-        }
 
         public Command SaveNote
         {
             get
             {
-                return new Command(async () => {
-                    await _notesService.Save(Note);
+                return new Command(() => {
+                    _notesData.SaveOrUpdate(Note);
                 });
             }
         }
@@ -95,7 +69,7 @@ namespace Notes.Mobile.Forms.NoteDetails
                     var decision = await CoreMethods.DisplayActionSheet($"Are you sure you want to delete this note?", "Yes", "No");
                     if (decision == "Yes")
                     {
-                        await _notesService.Delete(Note.Id);
+                        _notesData.Notes.Remove(Note);
                         await CoreMethods.PopPageModel();
                     }
                 });

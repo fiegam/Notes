@@ -1,8 +1,11 @@
-﻿using System;
+﻿using PropertyChanged;
+using System;
+using System.ComponentModel;
 
 namespace Notes.Mobile.Model
 {
-    public class Note
+    [ImplementPropertyChanged]
+    public class Note: INotifyPropertyChanged
     {
         public bool IsNew
         {
@@ -17,5 +20,7 @@ namespace Notes.Mobile.Model
         public string Title { get; set; }
 
         public string Body { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

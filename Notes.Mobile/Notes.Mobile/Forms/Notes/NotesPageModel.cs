@@ -6,6 +6,8 @@ using PropertyChanged;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Xamarin.Forms;
+using System;
+using Notes.Mobile.Data;
 
 namespace Notes.Mobile.Forms.Notes
 {
@@ -14,38 +16,25 @@ namespace Notes.Mobile.Forms.Notes
     {
         private NotesService _notesService;
 
-        public ObservableCollection<Note> Notes { get; }
+        public ObservableCollection<Note> Notes { get; private set; }
 
-        public NotesPageModel()
+        public NotesPageModel(INotesData notesData)
         {
-            _notesService = new NotesService();
-
-            this.Notes = new ObservableCollection<Note>();
-            this.Initialization = Refresh();
+            _notesData = notesData;
+                      
         }
 
         public Task Initialization { get; }
 
-        public async Task Refresh()
+        public override void Init(object initData)
         {
-            var notes = await _notesService.GetNotes();
-            Notes.Clear();
-            foreach (var note in notes)
-            {
-               this.Notes.Add(note);
-            }
-        }
-
-        public override void ReverseInit(object value)
-        {
-            var newNote = value as Note;
-            if (!Notes.Contains(newNote))
-            {
-                Notes.Add(newNote);
-            }
+            this.Notes = _notesData.Notes;
+            base.Init(initData);
         }
 
         private Note _selectedNote;
+
+        private INotesData _notesData;
 
         public Note SelectedNote
         {
@@ -68,7 +57,6 @@ namespace Notes.Mobile.Forms.Notes
                 return new Command(async () =>
                 {
                     await CoreMethods.PushPageModel<NoteDetailsPageModel>();
-                    await Refresh();
                 });
             }
         }
@@ -80,7 +68,6 @@ namespace Notes.Mobile.Forms.Notes
                 return new Command<Note>(async (note) =>
                 {
                     await CoreMethods.PushPageModel<NoteDetailsPageModel>(note);
-                    await Refresh();
                 });
             }
         }

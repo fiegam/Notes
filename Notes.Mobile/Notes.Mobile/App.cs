@@ -1,6 +1,7 @@
 ﻿using FreshMvvm;
 using Notes.Mobile.Forms.NoteDetails;
 using Notes.Mobile.Forms.Notes;
+using Notes.Mobile.Infrastructure;
 using System;
 using Xamarin.Forms;
 
@@ -10,6 +11,8 @@ namespace Notes.Mobile
     {
         public App()
         {
+            IoC.Init();
+
             MainPage = new MainPage(this);
             //LoadNotes();
         }
