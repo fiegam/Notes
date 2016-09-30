@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Notes.Mobile.Model;
+using System.Threading.Tasks;
 
 namespace Notes.Mobile.Data
 {
@@ -8,5 +9,7 @@ namespace Notes.Mobile.Data
         ObservableCollection<Note> Notes { get; }
 
         void SaveOrUpdate(Note note);
+
+        Task RefreshNotes();
     }
 }

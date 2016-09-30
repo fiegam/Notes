@@ -1,11 +1,9 @@
 ﻿using Notes.Mobile.Api;
 using Notes.Mobile.Model;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Notes.Mobile.Data
 {
@@ -20,12 +18,12 @@ namespace Notes.Mobile.Data
             _notesService = notesService;
             Notes = new ObservableCollection<Note>();
             Notes.CollectionChanged += Notes_CollectionChanged;
-            RefreshNotes();
+           // RefreshNotes();
         }
 
         private void Notes_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if(sender == this)
+            if (sender == this)
             {
                 return;
             }
@@ -39,26 +37,27 @@ namespace Notes.Mobile.Data
                         {
                             SaveNote(note);
                         }
-                        note.PropertyChanged += Note_PropertyChanged;   
+                        note.PropertyChanged += Note_PropertyChanged;
                     }
                     break;
+
                 case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
                     _notesService.Delete((e.OldItems[0] as Note).Id);
                     break;
             }
         }
 
-        private Dictionary<Note, Task<Note>> _savingNoteTasks = new Dictionary<Note, Task<Note>>();
+        private List<KeyValuePair<Note, Task<Note>>> _savingNoteTasks = new List<KeyValuePair<Note,Task<Note>>>();
 
         private void SaveNote(Note note)
         {
             var saveNoteTask = _notesService.Save(note);
-            _savingNoteTasks.Add(note,saveNoteTask);
+            _savingNoteTasks.Add(new KeyValuePair<Note,Task<Note>>(note, saveNoteTask));
 
             saveNoteTask.ContinueWith(async (nTask) =>
             {
                 note.Id = (await nTask).Id;
-                _savingNoteTasks.Remove(note);
+                _savingNoteTasks.RemoveAll(x=>x.Key == note);
             });
         }
 
@@ -66,9 +65,9 @@ namespace Notes.Mobile.Data
         {
             var note = sender as Note;
 
-            if (_savingNoteTasks.ContainsKey(note))
+            if (_savingNoteTasks.Any(x=>x.Key == note))
             {
-                var saveNoteTask = _savingNoteTasks[note];
+                var saveNoteTask = _savingNoteTasks.FirstOrDefault(x=>x.Key == note).Value;
                 if (saveNoteTask != null)
                 {
                     saveNoteTask.ContinueWith(async (noteTask) => UpdateNote(e, await noteTask));
@@ -77,6 +76,7 @@ namespace Notes.Mobile.Data
             }
             UpdateNote(e, note);
         }
+
         private void UpdateNote(System.ComponentModel.PropertyChangedEventArgs e, Note note)
         {
             switch (e.PropertyName)
@@ -84,22 +84,21 @@ namespace Notes.Mobile.Data
                 case "Title":
                     _notesService.UpdateTitle(note.Id, note.Title);
                     break;
+
                 case "Body":
                     _notesService.UpdateBody(note.Id, note.Body);
                     break;
             }
         }
 
-        private async Task RefreshNotes()
+        public async Task RefreshNotes()
         {
             var notes = await _notesService.GetNotes();
 
             //var notesToRemove = Notes.Where(n => !notes.Any(nn => nn.Id == n.Id));
 
-            
-
             Notes.Clear();
-            foreach(var note in notes)
+            foreach (var note in notes)
             {
                 Notes.Add(note);
             }
