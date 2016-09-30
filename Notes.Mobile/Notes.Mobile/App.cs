@@ -12,9 +12,6 @@ namespace Notes.Mobile
         public App()
         {
             IoC.Init();
-
-           // MainPage = new MainPage(this);
-            //LoadNotes();
         }
 
         public void LoadNotes()
@@ -26,7 +23,7 @@ namespace Notes.Mobile
                 MainPage = notesContainer;
             }catch(Exception ex)
             {
-                
+                MainPage.Title = ex.Message;
             }
         }
 
