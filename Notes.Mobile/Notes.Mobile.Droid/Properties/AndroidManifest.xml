@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="auto" package="Notes.Mobile" android:versionCode="0" android:versionName="alpha">
 	<uses-sdk android:minSdkVersion="19" android:targetSdkVersion="19" />
-	<application android:label="Notes.Mobile"></application>
+	<uses-permission android:name="android.permission.INTERNET" />
+	<application android:label="Notes.Mobile" android:icon="@drawable/icon"></application>
 </manifest>

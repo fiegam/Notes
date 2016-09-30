@@ -5,7 +5,7 @@ using System.ComponentModel;
 namespace Notes.Mobile.Model
 {
     [ImplementPropertyChanged]
-    public class Note: INotifyPropertyChanged
+    public class Note : INotifyPropertyChanged
     {
         public bool IsNew
         {
@@ -22,5 +22,25 @@ namespace Notes.Mobile.Model
         public string Body { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public Notes.Contract.Model.Note ToContractNote()
+        {
+            return new Contract.Model.Note
+            {
+                Id = Id,
+                Title = Title,
+                Body = Body
+            };
+        }
+
+        public static Notes.Mobile.Model.Note FromContractNote(Notes.Contract.Model.Note source)
+        {
+            return new Mobile.Model.Note
+            {
+                Id = source.Id ?? Guid.Empty,
+                Title = source.Title,
+                Body = source.Body
+            };
+        }
     }
 }

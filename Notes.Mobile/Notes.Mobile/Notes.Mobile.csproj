@@ -69,17 +69,12 @@
     </Compile>
     <Compile Include="Forms\NoteDetails\NoteDetailsPageModel.cs" />
     <Compile Include="Infrastructure\IoC.cs" />
-    <Compile Include="Infrastructure\MappingExtension.cs" />
     <Compile Include="Infrastructure\XamlImprovements\UnfocusedAttached.cs" />
     <Compile Include="MainPage.cs" />
     <Compile Include="Model\Note.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="EmitMapper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\EmitMapper.1.0.0\lib\EmitMapper.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="FreshIOC, Version=1.0.6071.17008, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FreshMvvm.2.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshIOC.dll</HintPath>
       <Private>True</Private>
