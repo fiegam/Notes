@@ -28,7 +28,7 @@ namespace Notes.WebApi.Tests.Fakes
             return await Task.Run(() => Notes);
         }
 
-        public async Task SaveNote(Note note)
+        public async Task AddNote(Note note)
         {
             await Task.Run(() => Notes.Add(note));
         }

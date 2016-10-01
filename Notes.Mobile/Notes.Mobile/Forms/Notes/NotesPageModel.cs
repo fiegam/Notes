@@ -14,8 +14,6 @@ namespace Notes.Mobile.Forms.Notes
     [ImplementPropertyChanged]
     public class NotesPageModel : FreshBasePageModel
     {
-        private NotesService _notesService;
-
         public ObservableCollection<Note> Notes { get; private set; }
 
         public NotesPageModel(INotesData notesData)

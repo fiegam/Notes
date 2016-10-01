@@ -5,6 +5,7 @@ using System.Linq;
 using System.Web;
 using Nancy;
 using Notes.Core.Infrastructure;
+using Notes.Core.Exceptions;
 
 namespace Notes.WebApi.Infrastructure
 {
@@ -14,10 +15,14 @@ namespace Notes.WebApi.Infrastructure
 
         public void Handle(HttpStatusCode statusCode, NancyContext context)
         {
-            var exception = context.Items[NancyEngine.ERROR_EXCEPTION] as Exception;
-            if (exception != null)
+            if (context.Items.ContainsKey(NancyEngine.ERROR_EXCEPTION))
             {
-                _log.Fatal("Unhandled Exception", exception);
+                var exception = context.Items[NancyEngine.ERROR_EXCEPTION] as Exception;
+                //todo handle exceptions and return appropriate status code
+                if (exception != null)
+                {
+                    _log.Fatal("Unhandled Exception", exception);
+                }
             }
         }
 

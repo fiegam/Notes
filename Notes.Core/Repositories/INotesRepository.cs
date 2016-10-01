@@ -11,7 +11,7 @@ namespace Notes.Core.Repositories
         Task<IEnumerable<Note>> GetNotes();
         Task UpdateBody(Guid id, string body);
         Task UpdateTitle(Guid id, string title);
-        Task SaveNote(Note note);
+        Task AddNote(Note note);
         Task UpdateNote(Note note);
         Task Delete(Guid id);
     }

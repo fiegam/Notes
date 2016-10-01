@@ -20,7 +20,7 @@ namespace Notes.Core.CommandHandlers
         public async Task<object> HandleAsync(DeleteNoteCommand command)
         {
             //just check if note exists
-            var note = await _noteRepository.GetNote(command.Id.Value);
+            var note = await _noteRepository.GetNote(command.Id);
 
             await _noteRepository.Delete(note.Id);
 

@@ -37,7 +37,7 @@ namespace Notes.Mobile.Model
         {
             return new Mobile.Model.Note
             {
-                Id = source.Id ?? Guid.Empty,
+                Id = source.Id,
                 Title = source.Title,
                 Body = source.Body
             };

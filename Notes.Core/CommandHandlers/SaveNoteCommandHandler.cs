@@ -19,10 +19,12 @@ namespace Notes.Core.CommandHandlers
         public async Task<object> HandleAsync(SaveNoteCommand command)
         {
             var note = command.Note.MapTo<Note>();
-            if (note.IsNew())
-            {
-                note.Id = Guid.NewGuid();
-                await _notesRepository.SaveNote(note);
+
+            var existingNote = _notesRepository.GetNote(note.Id);
+
+            if(existingNote == null)
+            { 
+                await _notesRepository.AddNote(note);
             }
             else
             {

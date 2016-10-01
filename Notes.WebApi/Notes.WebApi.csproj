@@ -44,6 +44,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FluentValidation, Version=6.3.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\FluentValidation.6.3.4-alpha\lib\Net45\FluentValidation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
       <Private>True</Private>
@@ -105,8 +109,8 @@
       <HintPath>..\packages\Nancy.Owin.2.0.0-barneyrubble\lib\net452\Nancy.Owin.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Nancy.Validation.DataAnnotations, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\Nancy.Validation.DataAnnotations.2.0.0-barneyrubble\lib\net452\Nancy.Validation.DataAnnotations.dll</HintPath>
+    <Reference Include="Nancy.Validation.FluentValidation, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Validation.FluentValidation.2.0.0-barneyrubble\lib\net452\Nancy.Validation.FluentValidation.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
@@ -182,6 +186,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="AppStart\NotesBootstrapper.cs" />
+    <Compile Include="Validation\DeletNoteCommandValidator.cs" />
+    <Compile Include="Validation\GetNoteQueryValidator.cs" />
+    <Compile Include="Validation\NoteValidator.cs" />
+    <Compile Include="Validation\SaveNoteCommandValidator.cs" />
+    <Compile Include="Validation\SetNoteBodyCommandValidator.cs" />
+    <Compile Include="Validation\SetNoteTitleCommandValidator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Notes.Contract\Notes.Contract.csproj">

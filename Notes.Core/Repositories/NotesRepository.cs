@@ -57,7 +57,7 @@ namespace Notes.Core.Repositories
             }
         }
 
-        public async Task SaveNote(Note note)
+        public async Task AddNote(Note note)
         {
             await NotesCollection.InsertOneAsync(note);
         }
