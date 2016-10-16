@@ -15,6 +15,7 @@ namespace Notes.Mobile.Infrastructure
         {
             FreshIOC.Container.Register<INotesService, NotesService>().AsSingleton();
             FreshIOC.Container.Register<INotesData, NotesData>().AsSingleton();
+            FreshIOC.Container.Register<IAccountService, AccountService>().AsSingleton();
         }
     }
 }

@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Notes.Mobile.Forms.Login.LoginPage"
+             xmlns:local="clr-namespace:Notes.Mobile;assembly=Notes.Mobile"
+             Title="Login">
+
+  <StackLayout Padding="15">
+    <Label Text="Account"></Label>
+    <Entry Text="{Binding AccountName}">
+    </Entry>
+    <Label Text="Body"></Label>
+    <Entry Text="{Binding Password}"></Entry>
+    <Button Text="Login" Command="{Binding Login}"></Button>
+  </StackLayout>
+</ContentPage>

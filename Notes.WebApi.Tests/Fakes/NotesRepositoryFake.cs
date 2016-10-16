@@ -23,9 +23,9 @@ namespace Notes.WebApi.Tests.Fakes
             return await Task.Run(()=>Notes.FirstOrDefault(x => x.Id == id));
         }
 
-        public async Task<IEnumerable<Note>> GetNotes()
+        public async Task<IEnumerable<Note>> GetNotes(Guid accountId)
         {
-            return await Task.Run(() => Notes);
+            return await Task.Run(() => Notes.Where(n=>n.OwnerId == accountId));
         }
 
         public async Task AddNote(Note note)
@@ -53,6 +53,11 @@ namespace Notes.WebApi.Tests.Fakes
         public async Task Delete(Guid noteId)
         {
             await Task.Run(() => Notes.RemoveAll(x => x.Id == noteId));
+        }
+
+        public Task<Note> FindNote(Guid id)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -43,11 +43,14 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\CreateAccountCommand.cs" />
     <Compile Include="Commands\DeleteNoteCommand.cs" />
+    <Compile Include="Commands\LoginCommand.cs" />
     <Compile Include="Commands\SaveNoteCommand.cs" />
     <Compile Include="Commands\SaveNoteCommandResult.cs" />
     <Compile Include="Commands\SetNoteBodyCommand.cs" />
     <Compile Include="Commands\SetNoteTitleCommand.cs" />
+    <Compile Include="Model\Account.cs" />
     <Compile Include="Model\Note.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetNoteQuery.cs" />

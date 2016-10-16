@@ -11,6 +11,13 @@ namespace Notes.Mobile.Api
 {
     public abstract class ApiServiceBase
     {
+        private class AuthTokenUpdatedEventArgs
+        {
+            public string AuthToken { get; set; }
+        }
+        private delegate void AuthTokenUpdatedEventHanlder(AuthTokenUpdatedEventArgs args);
+
+
 #if hardware
         private const string BaseUrl = "http://192.168.5.18/Notes.WebApi/";
 #else
@@ -18,13 +25,47 @@ namespace Notes.Mobile.Api
 #endif
         private HttpClient client;
 
+        private static string _authToken;
+
+        private static event AuthTokenUpdatedEventHanlder AuthTokenUpdated;
+
         protected ApiServiceBase()
         {
             client = new HttpClient();
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
+            AuthTokenUpdated += ApiServiceBase_AuthTokenUpdated;
+
+            if (_authToken != null)
+            {
+                SetAuthToken(_authToken);
+            }
+
             client.MaxResponseContentBufferSize = 256000;
         }
+
+        private void ApiServiceBase_AuthTokenUpdated(AuthTokenUpdatedEventArgs args)
+        {
+            SetAuthToken(args.AuthToken);
+        }
+
+        private void SetAuthToken(string authToken)
+        {
+            client.DefaultRequestHeaders.Remove("Authorization");
+            client.DefaultRequestHeaders.Add("Authorization", authToken);
+        }
+
+        protected static void Authorize(string authToken)
+        {
+            _authToken = authToken;
+
+            AuthTokenUpdated(new Api.ApiServiceBase.AuthTokenUpdatedEventArgs
+            {
+                AuthToken = authToken
+            });
+        }
+
+
 
         protected async Task<T> Get<T>(string path)
         {

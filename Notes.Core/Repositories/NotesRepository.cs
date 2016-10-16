@@ -24,13 +24,19 @@ namespace Notes.Core.Repositories
 
         private IMongoCollection<Note> NotesCollection { get { return _database.GetCollection<Note>(NotesCollectionName); } }
 
-        public async Task<IEnumerable<Note>> GetNotes()
+        public async Task<IEnumerable<Note>> GetNotes(Guid accountId)
         {
-            return (await NotesCollection.FindAsync(new BsonDocument())).ToList();
+            return (await NotesCollection.FindAsync(NotesByOwnerIdFilter(accountId))).ToList();
         }
 
-        private FilterDefinition<Note> NotesByIdFilter(Guid id) {
-            return Builders<Note>.Filter.Eq(x=>x.Id, id);
+        private FilterDefinition<Note> NotesByIdFilter(Guid id)
+        {
+            return Builders<Note>.Filter.Eq(x => x.Id, id);
+        }
+
+        private FilterDefinition<Note> NotesByOwnerIdFilter(Guid ownerId)
+        {
+            return Builders<Note>.Filter.Eq(x => x.OwnerId, ownerId);
         }
 
         public async Task UpdateTitle(Guid id, string title)
@@ -69,11 +75,17 @@ namespace Notes.Core.Repositories
 
         public async Task<Note> GetNote(Guid id)
         {
-            var note = (await NotesCollection.Find(NotesByIdFilter(id)).FirstOrDefaultAsync());
-            if(note == null)
+            var note = await FindNote(id);
+            if (note == null)
             {
                 throw new NotFoundException($"Note {id} was not found.");
             }
+            return note;
+        }
+        public async Task<Note> FindNote(Guid id)
+        {
+            var note = (await NotesCollection.Find(NotesByIdFilter(id)).FirstOrDefaultAsync());
+           
             return note;
         }
 

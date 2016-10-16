@@ -1,4 +1,5 @@
 ﻿using FreshMvvm;
+using Notes.Mobile.Forms.Login;
 using Notes.Mobile.Forms.NoteDetails;
 using Notes.Mobile.Forms.Notes;
 using Notes.Mobile.Infrastructure;
@@ -18,7 +19,7 @@ namespace Notes.Mobile
         {
             try
             {
-                var page = FreshPageModelResolver.ResolvePageModel<NotesPageModel>();
+                var page = FreshPageModelResolver.ResolvePageModel<LoginPageModel>();
                 var notesContainer = new FreshNavigationContainer(page);
                 MainPage = notesContainer;
             }catch(Exception ex)

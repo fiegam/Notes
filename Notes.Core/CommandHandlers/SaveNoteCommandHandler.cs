@@ -1,4 +1,5 @@
 ﻿using Notes.Contract.Commands;
+using Notes.Core.Infrastructure;
 using Notes.Core.Infrastructure.Extensions;
 using Notes.Core.Model;
 using Notes.Core.Repositories;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Notes.Core.CommandHandlers
 {
-    public class SaveNoteCommandHandler : ICommandHandler<SaveNoteCommand>
+    public class SaveNoteCommandHandler : HandlerBase, ICommandHandler<SaveNoteCommand>
     {
         private INotesRepository _notesRepository;
 
@@ -19,8 +20,9 @@ namespace Notes.Core.CommandHandlers
         public async Task<object> HandleAsync(SaveNoteCommand command)
         {
             var note = command.Note.MapTo<Note>();
+            note.OwnerId = CurrentIdentity.Id;
 
-            var existingNote = _notesRepository.GetNote(note.Id);
+            var existingNote = await _notesRepository.FindNote(note.Id);
 
             if(existingNote == null)
             { 
@@ -31,7 +33,10 @@ namespace Notes.Core.CommandHandlers
                 await _notesRepository.UpdateNote(note);
             }
 
-            return command.Note;
+            return new SaveNoteCommandResult
+            {
+                Note = command.Note
+            };
         }
     }
 }

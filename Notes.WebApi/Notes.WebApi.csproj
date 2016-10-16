@@ -101,6 +101,10 @@
       <HintPath>..\packages\Nancy.2.0.0-barneyrubble\lib\net452\Nancy.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Nancy.Authentication.Stateless, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\Nancy.Authentication.Stateless.2.0.0-barneyrubble\lib\net452\Nancy.Authentication.Stateless.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Nancy.Bootstrappers.Ninject, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Nancy.Bootstrappers.Ninject.2.0.0-barneyrubble\lib\net452\Nancy.Bootstrappers.Ninject.dll</HintPath>
       <Private>True</Private>
@@ -179,8 +183,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Infrastructure\AuthenticationProvider.cs" />
+    <Compile Include="Infrastructure\ClaimType.cs" />
+    <Compile Include="Infrastructure\NancyContextWrapper.cs" />
     <Compile Include="Infrastructure\ErrorStatusCodeHandler.cs" />
+    <Compile Include="Infrastructure\IdentityProvider.cs" />
     <Compile Include="Modules\InfoModule.cs" />
+    <Compile Include="Modules\AccountModule.cs" />
     <Compile Include="Modules\NotesModule.cs" />
     <Compile Include="Modules\NotesModuleBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

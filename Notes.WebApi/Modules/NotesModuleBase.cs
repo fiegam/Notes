@@ -1,22 +1,30 @@
 ﻿using Nancy;
+using Nancy.Security;
 using Nancy.Validation;
 using Ninject;
 using Notes.Core.Infrastructure;
+using Notes.WebApi.Infrastructure;
 using System;
 using System.Threading.Tasks;
 
 namespace Notes.WebApi.Modules
 {
-    public abstract class NotesModuleBase : NancyModule
+    public abstract class NotesModuleBase : NancyModule, IInitializable
     {
         private static ILogger Logger = LogProvider.GetLogger();
+        private bool _allowAnonymous;
 
-        protected NotesModuleBase(string path) : base(path)
+        protected NotesModuleBase(string path, bool allowAnonymous = false) : base(path)
         {
+            _allowAnonymous = allowAnonymous;
+            
         }
 
         [Inject]
-        public IHandlerFactory QueryHandlerFactory { get; set; }
+        public IHandlerFactory HandlerFactory { get; set; }
+
+        [Inject]
+        public IAuthenticationProvider AuthenicationProvider { get; set; }
 
         protected async Task<object> HandleQuery<TQuery>(TQuery query)
         {
@@ -27,7 +35,7 @@ namespace Notes.WebApi.Modules
                 return Negotiate.WithModel(validationResult).WithStatusCode(HttpStatusCode.BadRequest);
             }
 
-            var handler = QueryHandlerFactory.CreateQueryHandler<TQuery>();
+            var handler = HandlerFactory.CreateQueryHandler<TQuery>();
 
             var result = await handler.HandleAsync(query);
 
@@ -44,7 +52,7 @@ namespace Notes.WebApi.Modules
                 {
                     return Negotiate.WithModel(validationResult).WithStatusCode(HttpStatusCode.BadRequest);
                 }
-                var handler = QueryHandlerFactory.CreateCommandHandler<TCommand>();
+                var handler = HandlerFactory.CreateCommandHandler<TCommand>();
 
                 var result = await handler.HandleAsync(command);
 
@@ -53,6 +61,15 @@ namespace Notes.WebApi.Modules
             {
                 Logger.Error($"Exception when handling {typeof(TCommand)}", ex);
                 throw;
+            }
+        }
+
+        public void Initialize()
+        {
+            if(!_allowAnonymous)
+            {
+                AuthenicationProvider.Enable(this);
+                this.RequiresAuthentication();
             }
         }
     }

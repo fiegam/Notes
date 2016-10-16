@@ -19,11 +19,12 @@ namespace Notes.WebApi.Tests.Modules
         private Core.Model.Note[] _notes;
 
         [SetUp]
-        public void TestsSetup()
+        public async Task TestsSetup()
         {
-            _notes = new[] { new Core.Model.Note { Id = Guid.NewGuid(), Body = "body", Title = "title" } };
+            _notes = new[] { new Core.Model.Note { Id = Guid.NewGuid(), Body = "body", Title = "title", OwnerId = AccountRepositoryFake.TestAccount.Id } };
 
             NotesRepositoryFake.Instance.Notes.AddRange(_notes);
+            await LoginTest();
         }
 
         [Test]

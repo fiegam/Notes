@@ -17,7 +17,10 @@ namespace Notes.Mobile.Forms.NoteDetails
         public NoteDetailsPageModel(INotesData notesData)
         {
             _notesData = notesData;
-            Note = new Note();
+            Note = new Note
+            {
+                Id = Guid.NewGuid()
+            };
         }
 
         public Note Note { get; set; }
@@ -32,7 +35,10 @@ namespace Notes.Mobile.Forms.NoteDetails
             var note = initData as Note;
             if (note == null)
             {
-                Note = new Note();
+                Note = new Note()
+                {
+                    Id = Guid.NewGuid()
+                };
             }
             else
             {

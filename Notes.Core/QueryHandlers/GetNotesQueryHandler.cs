@@ -1,4 +1,5 @@
 ﻿using Notes.Contract.Queries;
+using Notes.Core.Infrastructure;
 using Notes.Core.Infrastructure.Extensions;
 using Notes.Core.Repositories;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Notes.Core.QueryHandlers
 {
-    public class GetNotesQueryHandler : IQueryHandler<GetNotesQuery>
+    public class GetNotesQueryHandler : HandlerBase, IQueryHandler<GetNotesQuery>
     {
         private INotesRepository _notesRepository;
 
@@ -19,7 +20,7 @@ namespace Notes.Core.QueryHandlers
         {
             return new GetNotesQueryResult
             {
-                Notes = (await _notesRepository.GetNotes()).Select(n=>n.MapTo<Contract.Model.Note>()).ToList()
+                Notes = (await _notesRepository.GetNotes(CurrentIdentity.Id)).Select(n=>n.MapTo<Contract.Model.Note>()).ToList()
             };
         }
     }

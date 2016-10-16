@@ -1,9 +1,12 @@
 ﻿using Nancy;
+using Nancy.Bootstrapper;
 using Nancy.Bootstrappers.Ninject;
 using Nancy.Configuration;
 using Nancy.Diagnostics;
 using Ninject;
 using Ninject.Extensions.Conventions;
+using Notes.Core.Servants;
+using Notes.WebApi.Infrastructure;
 
 namespace Notes.WebApi.AppStart
 {
@@ -20,6 +23,14 @@ namespace Notes.WebApi.AppStart
             container.Bind(c => c.FromAssembliesMatching("Notes.*")
            .SelectAllClasses()
            .BindDefaultInterfaces());
+
+            container.Bind<IAuthTokenServant>().To<JwtTokenServant>();
+        }
+
+        protected override void RequestStartup(IKernel container, IPipelines pipelines, NancyContext context)
+        {
+            base.RequestStartup(container, pipelines, context);
+            container.Rebind<INancyContextWrapper>().ToConstant(new NancyContextWrapper(context));
         }
 
         //protected override DiagnosticsConfiguration DiagnosticsConfiguration

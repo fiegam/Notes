@@ -13,6 +13,7 @@ namespace Notes.WebApi.Tests.Infrastructure
         {
             base.ConfigureRequestContainer(container, context);
             container.Rebind<INotesRepository>().ToConstant(NotesRepositoryFake.Instance);
+            container.Rebind<IAccountRepository>().ToConstant(AccountRepositoryFake.Instance);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Nancy.ModelBinding;
+﻿using Nancy.Authentication.Stateless;
+using Nancy.ModelBinding;
 using Notes.Contract.Commands;
 using Notes.Contract.Queries;
 using System.Threading.Tasks;
