@@ -13,8 +13,11 @@ namespace Notes.Mobile.Api
         public async Task<List<Note>> GetNotes()
         {
             var result = await Get<GetNotesQueryResult>("notes");
-
-            return result.Notes.Select(x => Mobile.Model.Note.FromContractNote(x)).ToList();
+            if (result != null)
+            {
+                return result.Notes.Select(x => Mobile.Model.Note.FromContractNote(x)).ToList();
+            }
+            return new List<Note>();
         }
 
         public async Task<Note> Save(Note note)

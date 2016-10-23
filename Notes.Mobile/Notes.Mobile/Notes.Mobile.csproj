@@ -61,6 +61,12 @@
     <Compile Include="Converters\InverseBoleanConverter.cs" />
     <Compile Include="Data\INotesData.cs" />
     <Compile Include="Data\NotesData.cs" />
+    <Compile Include="Events\EventsManager.cs" />
+    <Compile Include="Events\EventAggregator.cs" />
+    <Compile Include="Events\AuthorizedEvent.cs" />
+    <Compile Include="Events\UnauthorizedEvent.cs" />
+    <Compile Include="Exceptions\NotesApiException.cs" />
+    <Compile Include="Exceptions\NotesException.cs" />
     <Compile Include="Forms\Login\LoginPage.xaml.cs">
       <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>

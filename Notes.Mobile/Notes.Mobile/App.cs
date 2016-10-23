@@ -1,28 +1,34 @@
 ﻿using FreshMvvm;
+using Notes.Mobile.Events;
 using Notes.Mobile.Forms.Login;
-using Notes.Mobile.Forms.NoteDetails;
 using Notes.Mobile.Forms.Notes;
 using Notes.Mobile.Infrastructure;
 using System;
 using Xamarin.Forms;
+using System.Threading.Tasks;
 
 namespace Notes.Mobile
 {
-    public class App : Application
+    public class App : Application, IAsyncListener<UnauthorizedEvent>
     {
         public App()
         {
             IoC.Init();
+            EventsManager.Subscribe(this);
         }
+
+        FreshBasePageModel _mainPageModel;
 
         public void LoadNotes()
         {
             try
             {
-                var page = FreshPageModelResolver.ResolvePageModel<LoginPageModel>();
+                var page = FreshPageModelResolver.ResolvePageModel<NotesPageModel>();
+                _mainPageModel = page.GetModel();
                 var notesContainer = new FreshNavigationContainer(page);
                 MainPage = notesContainer;
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 MainPage.Title = ex.Message;
             }
@@ -44,5 +50,9 @@ namespace Notes.Mobile
         }
 
         
+        public async Task Handle(UnauthorizedEvent message)
+        {
+           await _mainPageModel.CoreMethods.PushPageModel<LoginPageModel>();
+        }
     }
 }

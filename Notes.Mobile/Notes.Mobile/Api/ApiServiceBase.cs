@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json;
+using Notes.Mobile.Events;
+using Notes.Mobile.Exceptions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,32 +67,36 @@ namespace Notes.Mobile.Api
             });
         }
 
-
+        protected async Task HandleUnsuccessStatuCode(HttpResponseMessage response)
+        {
+            switch (response.StatusCode)
+            {
+                case System.Net.HttpStatusCode.Unauthorized:
+                    throw new UnauthorizedAccessException();
+                    break;
+                default:
+                    var message = await response.Content.ReadAsStringAsync();
+                    throw new NotesApiException(message, response.StatusCode);
+            }
+        }
 
         protected async Task<T> Get<T>(string path)
         {
-            try
-            {
-                var uri = new Uri(BaseUrl + path);
+            var uri = new Uri(BaseUrl + path);
 
-                var response = await client.GetAsync(uri);
-                if (response.IsSuccessStatusCode)
-                {
-                    var content = await response.Content.ReadAsStringAsync();
-                    var result = JsonConvert.DeserializeObject<T>(content);
-                    return result;
-                }
-                else
-                {
-                    var message = await response.Content.ReadAsStringAsync();
-                    throw new Exception("API exception: " + message);
-                }
-            }
-            catch (Exception ex)
+            var response = await client.GetAsync(uri);
+            if (response.IsSuccessStatusCode)
             {
-                //todo handle
-                throw;
+                var content = await response.Content.ReadAsStringAsync();
+                var result = JsonConvert.DeserializeObject<T>(content);
+                return result;
             }
+            else
+            {
+                await HandleUnsuccessStatuCode(response);
+                return default(T);
+            }
+
         }
 
         protected async Task Delete(string path)

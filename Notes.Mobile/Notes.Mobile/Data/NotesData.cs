@@ -1,4 +1,5 @@
 ﻿using Notes.Mobile.Api;
+using Notes.Mobile.Events;
 using Notes.Mobile.Model;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Notes.Mobile.Data
 {
-    public class NotesData : INotesData
+    public class NotesData : INotesData, IAsyncListener<AuthorizedEvent>
     {
         private INotesService _notesService;
 
@@ -20,6 +21,9 @@ namespace Notes.Mobile.Data
             _notesService = notesService;
             Notes = new ObservableCollection<Note>();
             Notes.CollectionChanged += Notes_CollectionChanged;
+
+            EventsManager.Subscribe<AuthorizedEvent>(this);
+
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             RefreshNotes();
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
@@ -91,17 +95,24 @@ namespace Notes.Mobile.Data
 
         private async Task RefreshNotes()
         {
-            var notes = await _notesService.GetNotes();
-
-            //var notesToRemove = Notes.Where(n => !notes.Any(nn => nn.Id == n.Id));
-
-            
-
-            Notes.Clear();
-            foreach(var note in notes)
+            try
             {
-                Notes.Add(note);
+                var notes = await _notesService.GetNotes();
+
+                //var notesToRemove = Notes.Where(n => !notes.Any(nn => nn.Id == n.Id));
+
+
+                Notes.Clear();
+                foreach (var note in notes)
+                {
+                    Notes.Add(note);
+                }
             }
+            catch (UnauthorizedAccessException ex)
+            {
+                EventsManager.Raise(new UnauthorizedEvent());
+            }
+
         }
 
         public void SaveOrUpdate(Note note)
@@ -110,6 +121,11 @@ namespace Notes.Mobile.Data
             {
                 Notes.Add(note);
             }
+        }
+
+        public async Task Handle(AuthorizedEvent message)
+        {
+            await RefreshNotes();
         }
     }
 }
