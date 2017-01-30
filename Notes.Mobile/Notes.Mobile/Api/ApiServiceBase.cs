@@ -73,7 +73,6 @@ namespace Notes.Mobile.Api
             {
                 case System.Net.HttpStatusCode.Unauthorized:
                     throw new UnauthorizedAccessException();
-                    break;
                 default:
                     var message = await response.Content.ReadAsStringAsync();
                     throw new NotesApiException(message, response.StatusCode);
