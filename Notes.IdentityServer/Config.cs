@@ -11,7 +11,7 @@ namespace Notes.IdentityServer
         {
             return new List<ApiResource>
             {
-                new ApiResource("api1", "Notes API")
+                new ApiResource("notes.api", "Notes API")
             };
         }
 
@@ -20,29 +20,29 @@ namespace Notes.IdentityServer
         {
             return new List<Client>
             {
-                new Client
-                {
-                    ClientId = "Notes.Web",
-                    ClientName = "Notes Web Application",
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
-                      RequireConsent = false,
-                    ClientSecrets =
-                    {
-                        new Secret("19e94cce-52d0-4240-b9b5-55afc8c38857".Sha256())
-                    },
-                    RedirectUris           = { "http://localhost:5002/signin-oidc" },
-                    PostLogoutRedirectUris = { "http://localhost:5002" },
-                    AllowedScopes = {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "api1" },
-                    AllowOfflineAccess = true
-                },
+                //new Client
+                //{
+                //    ClientId = "Notes.Web",
+                //    ClientName = "Notes Web Application",
+                //    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+                //      RequireConsent = false,
+                //    ClientSecrets =
+                //    {
+                //        new Secret("19e94cce-52d0-4240-b9b5-55afc8c38857".Sha256())
+                //    },
+                //    RedirectUris           = { "http://localhost:5002/signin-oidc" },
+                //    PostLogoutRedirectUris = { "http://localhost:5002" },
+                //    AllowedScopes = {
+                //        IdentityServerConstants.StandardScopes.OpenId,
+                //        IdentityServerConstants.StandardScopes.Profile,
+                //        "api1" },
+                //    AllowOfflineAccess = true
+                //},
                 new Client
 {
-    ClientId = "js",
-    ClientName = "JavaScript Client",
-    AllowedGrantTypes = GrantTypes.Implicit,
+    ClientId = "notes.web",
+    ClientName = "Notes Web Application",
+    AllowedGrantTypes = GrantTypes.ImplicitAndClientCredentials,
     AllowAccessTokensViaBrowser = true,
                       RequireConsent = false,
 
@@ -54,7 +54,7 @@ namespace Notes.IdentityServer
     {
         IdentityServerConstants.StandardScopes.OpenId,
         IdentityServerConstants.StandardScopes.Profile,
-        "api1"
+        "notes.api"
     }
 }
             };

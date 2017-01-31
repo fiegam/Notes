@@ -56,7 +56,7 @@ namespace Notes.CoreApi
                 Authority = "http://localhost:5000",
                 RequireHttpsMetadata = false,
 
-                ApiName = "api1"
+                ApiName = "notes.api"
             });
 
             app.UseMvc();
