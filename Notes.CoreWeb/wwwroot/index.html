@@ -1,17 +1,26 @@
-﻿<!DOCTYPE html>
-<html>
+﻿<html>
 <head>
-    <meta charset="utf-8" />
-    <title></title>
+    <title>Angular QuickStart</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="styles/bundle.css">
+    <link rel="stylesheet" href="styles/app.css">
+    <!-- 1. Load libraries -->
+    <!-- Polyfill(s) for older browsers -->
+    <script src="libs/core-js/shim.min.js"></script>
+    <script src="libs/zone.js/zone.js"></script>
+    <script src="libs/reflect-metadata/Reflect.js"></script>
+    <script src="libs/systemjs/system.src.js"></script>
+    <!-- 2. Configure SystemJS -->
+    <script src="systemjs.config.js"></script>
+    <script>
+        System.import('app').catch(function (err) { console.error(err); });
+    </script>
 </head>
+<!-- 3. Display the application -->
 <body>
-    <button id="login">Login</button>
-    <button id="api">Call API</button>
-    <button id="logout">Logout</button>
-
-    <pre id="results"></pre>
-
-    <script src="oidc-client.js"></script>
-    <script src="app.js"></script>
+    <notes-header>Loading header...</notes-header>
+    <notes-body>Loading body...</notes-body>
+    <notes-footer>Loading footer...</notes-footer>
 </body>
 </html>
