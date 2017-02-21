@@ -3,6 +3,7 @@ var concatCss = require('gulp-concat-css');
 var libs = './wwwroot/libs/';
 var app = './wwwroot/app/';
 var styles = './wwwroot/styles/';
+var typings = './typings/';
 
 gulp.task('default', function () {
     // place code for your default task here
@@ -45,11 +46,32 @@ gulp.task('restore:angular', function () {
     ]).pipe(gulp.dest(libs + '@angular'));
 });
 
+gulp.task('restore:angularUI', function () {
+    gulp.src([
+        'node_modules/@ng-bootstrap/**/*.js'
+    ]).pipe(gulp.dest(libs + '@ng-bootstrap'));
+});
+
 gulp.task('restore:bootstrap', function () {
     gulp.src([
         'node_modules/bootstrap/dist/**/*.*'
     ]).pipe(gulp.dest(libs + 'bootstrap'));
 });
+
+gulp.task('restore:oidc-client', function () {
+    gulp.src([
+        'node_modules/oidc-client/dist/**/*.*'
+    ]).pipe(gulp.dest(libs + 'oidc-client'));
+});
+
+gulp.task('restore-typings:oidc-client', function () {
+    gulp.src([
+        'node_modules/oidc-client/*.d.ts'
+    ]).pipe(gulp.dest(typings + 'oidc-client'));
+});
+
+
+
 
 gulp.task('compile:css', function () {
     return gulp.src(libs + '**/*.css')
@@ -62,6 +84,7 @@ gulp.task('compile:appcss', function () {
       .pipe(gulp.dest(styles));
 });
 
+
 gulp.task('restore', [
     'restore:core-js',
     'restore:zone.js',
@@ -70,5 +93,8 @@ gulp.task('restore', [
     'restore:rxjs',
     'restore:angular-in-memory-web-api',
     'restore:angular',
-    'restore:bootstrap'
+    'restore:bootstrap',
+    'restore:oidc-client',
+    'restore-typings:oidc-client',
+    'restore:angularUI'
 ]);

@@ -10,6 +10,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var platform_browser_1 = require('@angular/platform-browser');
+var ng_bootstrap_1 = require('@ng-bootstrap/ng-bootstrap');
 var header_component_1 = require('./header/header.component');
 var notes_component_1 = require('./notes/notes.component');
 var NotesModule = (function () {
@@ -17,9 +18,9 @@ var NotesModule = (function () {
     }
     NotesModule = __decorate([
         core_1.NgModule({
-            imports: [platform_browser_1.BrowserModule],
+            imports: [ng_bootstrap_1.NgbModule.forRoot(), platform_browser_1.BrowserModule],
             declarations: [notes_component_1.NotesComponent, header_component_1.HeaderComponent],
-            bootstrap: [notes_component_1.NotesComponent, header_component_1.HeaderComponent]
+            bootstrap: [notes_component_1.NotesComponent, header_component_1.HeaderComponent],
         }), 
         __metadata('design:paramtypes', [])
     ], NotesModule);

@@ -2,7 +2,16 @@
     <div class="row">
 
         <div class="col-xs-8"><h1>Notes</h1></div>
-        <div class="col-xs-4"><h1>Welcome {{User.Name}}</h1></div>
+        <div class="col-xs-4" *ngIf="session.isLoggedIn">
+            <div ngbDropdown class="d-inline-block">
+                <button class="btn btn-outline-primary" id="profile-dropdown" ngbDropdownToggle>Welcome {{user.name}}</button>
+                <div class="dropdown-menu" aria-labelledby="profile-dropdown">
+                    <button class="dropdown-item" (click)="auth.logout()">Logout</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-4" *ngIf="!session.isLoggedIn"><button (click)="auth.login()">Login</button></div>
 
     </div>
 </div>
