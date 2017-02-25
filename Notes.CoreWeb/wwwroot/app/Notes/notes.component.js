@@ -8,41 +8,39 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 var core_1 = require('@angular/core');
+var core_2 = require("@angular/core");
+var NotesService_1 = require("./services/NotesService");
+var session_service_1 = require("../auth/service/session.service");
 var NotesComponent = (function () {
-    function NotesComponent() {
-        //this.notes = [{
-        //    Title: 'Note1',
-        //    Body: 'Body1'
-        //}, {
-        //        Title: 'Note2',
-        //        Body: 'Body2'
-        //    }
-        //];
-        this.notes = [{
-                Title: 'Note1',
-                Body: 'Body1'
-            }, {
-                Title: 'Note2',
-                Body: 'Body2'
-            }
-        ];
+    function NotesComponent(notesService) {
+        var _this = this;
+        this.notesService = notesService;
+        this.notes = [];
         this.test = 'test string';
         this.testNote = [{
-                Title: 'Note1',
-                Body: 'Body1'
+                title: 'Note1',
+                body: 'Body1'
             }, {
-                Title: 'Note2',
-                Body: 'Body2'
+                title: 'Note2',
+                body: 'Body2'
             }
         ];
+        notesService.GetNotes().subscribe(function (notes) {
+            _this.notes = notes;
+        });
     }
     NotesComponent = __decorate([
         core_1.Component({
             selector: 'notes-body',
-            templateUrl: 'app/notes/templates/notes.html'
-        }), 
-        __metadata('design:paramtypes', [])
+            templateUrl: 'app/notes/templates/notes.html',
+            providers: [NotesService_1.NotesService, session_service_1.SessionService]
+        }),
+        __param(0, core_2.Inject(NotesService_1.NotesService)), 
+        __metadata('design:paramtypes', [NotesService_1.NotesService])
     ], NotesComponent);
     return NotesComponent;
 }());

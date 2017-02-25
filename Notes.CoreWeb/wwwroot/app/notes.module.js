@@ -13,12 +13,13 @@ var platform_browser_1 = require('@angular/platform-browser');
 var ng_bootstrap_1 = require('@ng-bootstrap/ng-bootstrap');
 var header_component_1 = require('./header/header.component');
 var notes_component_1 = require('./notes/notes.component');
+var http_1 = require('@angular/http');
 var NotesModule = (function () {
     function NotesModule() {
     }
     NotesModule = __decorate([
         core_1.NgModule({
-            imports: [ng_bootstrap_1.NgbModule.forRoot(), platform_browser_1.BrowserModule],
+            imports: [ng_bootstrap_1.NgbModule.forRoot(), platform_browser_1.BrowserModule, http_1.HttpModule],
             declarations: [notes_component_1.NotesComponent, header_component_1.HeaderComponent],
             bootstrap: [notes_component_1.NotesComponent, header_component_1.HeaderComponent],
         }), 
