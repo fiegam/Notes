@@ -4,6 +4,7 @@ var libs = './wwwroot/libs/';
 var app = './wwwroot/app/';
 var styles = './wwwroot/styles/';
 var typings = './typings/';
+var gnf = require('gulp-npm-files');
 
 gulp.task('default', function () {
     // place code for your default task here
@@ -84,6 +85,10 @@ gulp.task('compile:appcss', function () {
       .pipe(gulp.dest(styles));
 });
 
+// Copy dependencies to build/node_modules/ 
+gulp.task('copyNpmDependenciesOnly', function () {
+    gulp.src(gnf(), { base: './' }).pipe(gulp.dest('./build'));
+});
 
 gulp.task('restore', [
     'restore:core-js',

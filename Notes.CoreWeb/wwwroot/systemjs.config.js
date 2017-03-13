@@ -25,6 +25,10 @@
             'rxjs': 'npm:rxjs',
             'angular-in-memory-web-api': 'npm:angular-in-memory-web-api',
             '@ng-bootstrap/ng-bootstrap': 'npm:@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
+            'angular-oauth2-oidc': 'npm:angular-oauth2-oidc/index.js',
+            'base64-js': 'npm:base64-js/index.js',
+            'js-base64': 'npm:js-base64/base64.js',
+            'sha256': 'npm:sha256/lib/sha256.js'
         },
         // packages tells the System loader how to load when no filename and/or no extension
         packages: {

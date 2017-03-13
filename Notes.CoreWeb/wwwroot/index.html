@@ -8,13 +8,16 @@
     <!-- 1. Load libraries -->
     <!-- Polyfill(s) for older browsers -->
 
-    <script src="libs/oidc-client/oidc-client.js"></script>
+    <!--<script src="libs/oidc-client/oidc-client.js"></script>-->
+    <script src="libs/requirejs/require.js"></script>
     <script src="libs/core-js/shim.min.js"></script>
-    <script src="libs/zone.js/zone.js"></script>
+ <!--   <script src="libs/zone.js/zone.js"></script>-->
     <script src="libs/reflect-metadata/Reflect.js"></script>
-    <script src="libs/systemjs/system.src.js"></script>
+    <!--<script src="libs/systemjs/system.src.js"></script>-->
     <!-- 2. Configure SystemJS -->
-    <script src="systemjs.config.js"></script>
+    <!--<script src="systemjs.config.js"></script>-->
+
+    <script src="./node_modules/steal/steal.js"></script>
     <script>
         System.import('app').catch(function (err) { console.error(err); });
     </script>
