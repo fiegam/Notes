@@ -46,9 +46,9 @@ namespace Notes.IdentityServer
     AllowAccessTokensViaBrowser = true,
                       RequireConsent = false,
 
-    RedirectUris =           { "http://localhost:5003/callback.html" },
-    PostLogoutRedirectUris = { "http://localhost:5003/index.html" },
-    AllowedCorsOrigins =     { "http://localhost:5003" },
+    RedirectUris =           { "http://localhost:5003/callback.html", "http://localhost:61679/home" },
+    PostLogoutRedirectUris = { "http://localhost:5003/index.html", "http://localhost:61679/home"  },
+    AllowedCorsOrigins =     { "http://localhost:5003", "http://localhost:61679" },
 
     AllowedScopes =
     {

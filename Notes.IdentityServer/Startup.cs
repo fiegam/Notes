@@ -32,6 +32,7 @@ namespace Notes.IdentityServer
 
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
+            
         }
 
         public IConfigurationRoot Configuration { get; }

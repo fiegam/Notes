@@ -5,7 +5,7 @@ import {Inject} from "@angular/core";
 import {SessionService} from "../../auth/service/session.service";
 
 //import 'rxjs/add/operator/catch';
-import 'libs/rxjs/add/operator/map';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 

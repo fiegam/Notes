@@ -1,6 +1,6 @@
 ﻿import { Component } from '@angular/core';
 import {Inject} from "@angular/core";
-import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+//import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {SessionService} from "../auth/service/session.service";
 import {AuthService} from "../auth/service/auth.service";
 

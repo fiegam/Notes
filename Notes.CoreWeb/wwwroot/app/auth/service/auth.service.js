@@ -11,10 +11,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
+Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var core_2 = require("@angular/core");
 var session_service_1 = require("./session.service");
-var angular_oauth2_oidc_1 = require('angular-oauth2-oidc');
+var angular_oauth2_oidc_1 = require("angular-oauth2-oidc");
 //import {Oidc} from "oidc-client"
 //@Injectable() specifies class is available to an injector for instantiation and an injector will display an error when trying to instantiate a class that is not marked as @Injectable()
 var AuthService = (function () {
@@ -76,12 +77,12 @@ var AuthService = (function () {
         enumerable: true,
         configurable: true
     });
-    AuthService = __decorate([
-        core_1.Injectable(),
-        __param(0, core_2.Inject(session_service_1.SessionService)), 
-        __metadata('design:paramtypes', [session_service_1.SessionService, angular_oauth2_oidc_1.OAuthService])
-    ], AuthService);
     return AuthService;
 }());
+AuthService = __decorate([
+    core_1.Injectable(),
+    __param(0, core_2.Inject(session_service_1.SessionService)),
+    __metadata("design:paramtypes", [session_service_1.SessionService, angular_oauth2_oidc_1.OAuthService])
+], AuthService);
 exports.AuthService = AuthService;
 //# sourceMappingURL=auth.service.js.map

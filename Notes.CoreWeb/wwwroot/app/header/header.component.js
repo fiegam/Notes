@@ -11,8 +11,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var core_1 = require('@angular/core');
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
 var core_2 = require("@angular/core");
+//import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 var session_service_1 = require("../auth/service/session.service");
 var auth_service_1 = require("../auth/service/auth.service");
 var HeaderComponent = (function () {
@@ -21,17 +23,16 @@ var HeaderComponent = (function () {
         this.auth = auth;
         this.user = session.getCurrentUser();
     }
-    HeaderComponent = __decorate([
-        core_1.Component({
-            selector: 'notes-header',
-            templateUrl: 'app/header/templates/header.html',
-            providers: [auth_service_1.AuthService, session_service_1.SessionService],
-        }),
-        __param(0, core_2.Inject(session_service_1.SessionService)),
-        __param(1, core_2.Inject(auth_service_1.AuthService)), 
-        __metadata('design:paramtypes', [session_service_1.SessionService, auth_service_1.AuthService])
-    ], HeaderComponent);
     return HeaderComponent;
 }());
+HeaderComponent = __decorate([
+    core_1.Component({
+        selector: 'notes-header',
+        templateUrl: 'app/header/templates/header.html',
+        providers: [auth_service_1.AuthService, session_service_1.SessionService],
+    }),
+    __param(0, core_2.Inject(session_service_1.SessionService)), __param(1, core_2.Inject(auth_service_1.AuthService)),
+    __metadata("design:paramtypes", [session_service_1.SessionService, auth_service_1.AuthService])
+], HeaderComponent);
 exports.HeaderComponent = HeaderComponent;
 //# sourceMappingURL=header.component.js.map

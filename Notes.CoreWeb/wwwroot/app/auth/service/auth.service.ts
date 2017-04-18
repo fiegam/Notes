@@ -19,7 +19,8 @@ export class AuthService {
     };
     private mgr: Oidc.UserManager = new Oidc.UserManager(this.config);
     */
-    constructor( @Inject(SessionService) private session: SessionService, private oauthService: OAuthService) {
+    constructor( @Inject(SessionService) private session: SessionService, private oauthService: OAuthService
+    ) {
 
         // URL of the SPA to redirect the user to after login
         this.oauthService.redirectUri = window.location.origin + "/index.html";
@@ -50,7 +51,7 @@ export class AuthService {
             // It dosn't send the user the the login page
             this.oauthService.tryLogin({});
 
-        });
+       });
        
 
        /* this.mgr.getUser()

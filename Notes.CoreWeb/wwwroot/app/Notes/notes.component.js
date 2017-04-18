@@ -11,7 +11,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var core_1 = require('@angular/core');
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
 var core_2 = require("@angular/core");
 var NotesService_1 = require("./services/NotesService");
 var session_service_1 = require("../auth/service/session.service");
@@ -33,16 +34,16 @@ var NotesComponent = (function () {
             _this.notes = notes;
         });
     }
-    NotesComponent = __decorate([
-        core_1.Component({
-            selector: 'notes-body',
-            templateUrl: 'app/notes/templates/notes.html',
-            providers: [NotesService_1.NotesService, session_service_1.SessionService]
-        }),
-        __param(0, core_2.Inject(NotesService_1.NotesService)), 
-        __metadata('design:paramtypes', [NotesService_1.NotesService])
-    ], NotesComponent);
     return NotesComponent;
 }());
+NotesComponent = __decorate([
+    core_1.Component({
+        selector: 'notes-body',
+        templateUrl: 'app/notes/templates/notes.html',
+        providers: [NotesService_1.NotesService, session_service_1.SessionService]
+    }),
+    __param(0, core_2.Inject(NotesService_1.NotesService)),
+    __metadata("design:paramtypes", [NotesService_1.NotesService])
+], NotesComponent);
 exports.NotesComponent = NotesComponent;
 //# sourceMappingURL=notes.component.js.map
