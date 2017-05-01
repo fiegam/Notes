@@ -16,7 +16,7 @@ var Observable_1 = require("rxjs/Observable");
 var http_1 = require("@angular/http");
 var core_1 = require("@angular/core");
 var core_2 = require("@angular/core");
-var session_service_1 = require("../../auth/service/session.service");
+var session_service_1 = require("../../auth/services/session.service");
 //import 'rxjs/add/operator/catch';
 require("rxjs/add/operator/map");
 var NotesService = (function () {
@@ -26,7 +26,12 @@ var NotesService = (function () {
         this.notesUrl = 'http://localhost:5001/api/values'; // URL to web API
     }
     NotesService.prototype.GetNotes = function () {
-        return this.http.get(this.notesUrl)
+        var jwt = localStorage.getItem('authorizationDataIdToken');
+        var authHeader = new http_1.Headers();
+        if (jwt) {
+            authHeader.append('Authorization', 'Bearer ' + jwt);
+        }
+        return this.http.get(this.notesUrl, { headers: authHeader })
             .map(this.extractData);
     };
     NotesService.prototype.extractData = function (res) {

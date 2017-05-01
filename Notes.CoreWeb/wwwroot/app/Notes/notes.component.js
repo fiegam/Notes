@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var core_2 = require("@angular/core");
 var NotesService_1 = require("./services/NotesService");
-var session_service_1 = require("../auth/service/session.service");
+var session_service_1 = require("../auth/services/session.service");
 var NotesComponent = (function () {
     function NotesComponent(notesService) {
         var _this = this;

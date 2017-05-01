@@ -1,7 +1,7 @@
 ﻿import { Component } from '@angular/core';
 import {Inject} from "@angular/core";
 import {NotesService} from "./services/NotesService";
-import {SessionService} from "../auth/service/session.service";
+import {SessionService} from "../auth/services/session.service";
 
 @Component({
     selector: 'notes-body',

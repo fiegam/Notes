@@ -13,26 +13,41 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
+var router_1 = require("@angular/router");
 var core_2 = require("@angular/core");
-//import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
-var session_service_1 = require("../auth/service/session.service");
-var auth_service_1 = require("../auth/service/auth.service");
+var oidc_security_service_1 = require("../auth/services/oidc.security.service");
+var auth_configuration_1 = require("../auth/auth.configuration");
+var session_service_1 = require("../auth/services/session.service");
 var HeaderComponent = (function () {
-    function HeaderComponent(session, auth) {
+    function HeaderComponent(securityService, session) {
+        this.securityService = securityService;
         this.session = session;
-        this.auth = auth;
         this.user = session.getCurrentUser();
     }
+    HeaderComponent.prototype.ngOnInit = function () {
+        console.log('ngOnInit _securityService.AuthorizedCallback');
+        if (window.location.hash) {
+            this.securityService.AuthorizedCallback();
+        }
+    };
+    HeaderComponent.prototype.Login = function () {
+        console.log('Do login logic');
+        this.securityService.Authorize();
+    };
+    HeaderComponent.prototype.Logout = function () {
+        console.log('Do logout logic');
+        this.securityService.Logoff();
+    };
     return HeaderComponent;
 }());
 HeaderComponent = __decorate([
     core_1.Component({
         selector: 'notes-header',
         templateUrl: 'app/header/templates/header.html',
-        providers: [auth_service_1.AuthService, session_service_1.SessionService],
+        providers: [oidc_security_service_1.OidcSecurityService, auth_configuration_1.AuthConfiguration, router_1.Router]
     }),
-    __param(0, core_2.Inject(session_service_1.SessionService)), __param(1, core_2.Inject(auth_service_1.AuthService)),
-    __metadata("design:paramtypes", [session_service_1.SessionService, auth_service_1.AuthService])
+    __param(0, core_2.Inject(oidc_security_service_1.OidcSecurityService)), __param(1, core_2.Inject(session_service_1.SessionService)),
+    __metadata("design:paramtypes", [oidc_security_service_1.OidcSecurityService, session_service_1.SessionService])
 ], HeaderComponent);
 exports.HeaderComponent = HeaderComponent;
 //# sourceMappingURL=header.component.js.map
