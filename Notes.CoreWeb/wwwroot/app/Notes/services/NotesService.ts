@@ -16,10 +16,10 @@ export class NotesService {
 
     public GetNotes(): Observable<Note[]> {
 
-var jwt = localStorage.getItem('authorizationDataIdToken');
+var jwt = localStorage['authorizationDataIdToken'];
   var authHeader = new Headers();
   if(jwt) {
-    authHeader.append('Authorization', 'Bearer ' + jwt);      
+    authHeader.append('Authorization', 'Bearer ' + JSON.parse(jwt));      
   }
         
         return this.http.get(this.notesUrl,{ headers: authHeader })

@@ -26,10 +26,10 @@ var NotesService = (function () {
         this.notesUrl = 'http://localhost:5001/api/values'; // URL to web API
     }
     NotesService.prototype.GetNotes = function () {
-        var jwt = localStorage.getItem('authorizationDataIdToken');
+        var jwt = localStorage['authorizationDataIdToken'];
         var authHeader = new http_1.Headers();
         if (jwt) {
-            authHeader.append('Authorization', 'Bearer ' + jwt);
+            authHeader.append('Authorization', 'Bearer ' + JSON.parse(jwt));
         }
         return this.http.get(this.notesUrl, { headers: authHeader })
             .map(this.extractData);
