@@ -17,6 +17,7 @@ var http_1 = require("@angular/http");
 var auth_module_1 = require("./auth/auth.module");
 var oidc_security_service_1 = require("./auth/services/oidc.security.service");
 var app_routes_1 = require("./app.routes");
+var http_factory_1 = require("./auth/http/http.factory");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -29,7 +30,11 @@ AppModule = __decorate([
         ],
         declarations: [app_component_1.AppComponent, notes_component_1.NotesComponent],
         bootstrap: [app_component_1.AppComponent, notes_component_1.NotesComponent],
-        providers: [oidc_security_service_1.OidcSecurityService]
+        providers: [oidc_security_service_1.OidcSecurityService, {
+                provide: http_1.Http,
+                useFactory: http_factory_1.httpFactory,
+                deps: [http_1.XHRBackend, http_1.RequestOptions]
+            }]
     })
 ], AppModule);
 exports.AppModule = AppModule;

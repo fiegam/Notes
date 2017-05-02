@@ -51,15 +51,6 @@ namespace Notes.CoreApi
 
             app.UseCors("default");
 
-            //app.UseIdentityServerAuthentication(new IdentityServerAuthenticationOptions
-            //{
-            //    Authority = "http://localhost:5000",
-            //    RequireHttpsMetadata = false,
-
-            //    ApiName = "notes.api"
-            //});
-
-            //app.UseMvc();
             var options = new JwtBearerOptions
             {
                 Audience = "notes.web", // your API Identifier, so i.e. your azure webite URL

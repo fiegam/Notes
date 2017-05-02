@@ -5,10 +5,11 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NotesComponent } from './Notes/notes.component';
 import { AppComponent } from './app.component';
 //import {NotesService} from "./Notes/services/NotesService";
-import { HttpModule } from '@angular/http';
+import { HttpModule, Http, XHRBackend, RequestOptions } from '@angular/http';
 import { AuthModule } from './auth/auth.module';
 import { OidcSecurityService } from './auth/services/oidc.security.service';
 import { routing } from './app.routes';
+import {httpFactory} from "./auth/http/http.factory";
 
 @NgModule({
     imports: [NgbModule.forRoot(), BrowserModule, HttpModule,
@@ -16,6 +17,10 @@ import { routing } from './app.routes';
     ],
     declarations: [AppComponent, NotesComponent],
     bootstrap: [ AppComponent, NotesComponent],
-    providers: [OidcSecurityService]
+    providers: [OidcSecurityService, {
+            provide: Http,
+            useFactory: httpFactory,
+            deps: [XHRBackend, RequestOptions]
+        }]
 })
 export class AppModule { }

@@ -1,8 +1,8 @@
 ﻿import { Observable } from 'rxjs/Observable';
 import { Http, Response, Headers } from '@angular/http';
-import {Injectable} from "@angular/core";
-import {Inject} from "@angular/core";
-import {SessionService} from "../../auth/services/session.service";
+import { Injectable } from "@angular/core";
+import { Inject } from "@angular/core";
+import { SessionService } from "../../auth/services/session.service";
 
 //import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -12,17 +12,10 @@ import 'rxjs/add/operator/map';
 export class NotesService {
     constructor( @Inject(SessionService) private session: SessionService, @Inject(Http) private http: Http) {
     }
-    private notesUrl = 'http://localhost:5001/api/values';  // URL to web API
+    private notesUrl = '/api/values';  // URL to web API
 
     public GetNotes(): Observable<Note[]> {
-
-var jwt = localStorage['authorizationDataIdToken'];
-  var authHeader = new Headers();
-  if(jwt) {
-    authHeader.append('Authorization', 'Bearer ' + JSON.parse(jwt));      
-  }
-        
-        return this.http.get(this.notesUrl,{ headers: authHeader })
+        return this.http.get(this.notesUrl)
             .map(this.extractData);
     }
 
