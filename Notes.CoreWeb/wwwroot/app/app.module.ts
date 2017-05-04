@@ -10,7 +10,7 @@ import { AuthModule } from './auth/auth.module';
 import { OidcSecurityService } from './auth/services/oidc.security.service';
 import { routing } from './app.routes';
 import {httpFactory} from "./auth/http/http.factory";
-
+import { SessionService } from './auth/services/session.service';
 @NgModule({
     imports: [NgbModule.forRoot(), BrowserModule, HttpModule,
         AuthModule.forRoot(), routing,
@@ -20,7 +20,7 @@ import {httpFactory} from "./auth/http/http.factory";
     providers: [OidcSecurityService, {
             provide: Http,
             useFactory: httpFactory,
-            deps: [XHRBackend, RequestOptions]
-        }]
+            deps: [XHRBackend, RequestOptions, SessionService]
+        }, SessionService]
 })
 export class AppModule { }

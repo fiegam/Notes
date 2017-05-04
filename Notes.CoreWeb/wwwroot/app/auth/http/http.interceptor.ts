@@ -1,13 +1,14 @@
-import { Injectable } from "@angular/core";
+import { Injectable, Inject } from "@angular/core";
 import { ConnectionBackend, RequestOptions, Request, RequestOptionsArgs, Response, Http, Headers } from "@angular/http";
 import { Observable } from "rxjs/Rx";
+import { SessionService } from "../services/session.service";
 //import {environment} from "../environments/environment";
 
 @Injectable()
 export class InterceptedHttp extends Http {
-    private environmentApiUrl : string = 'http://localhost:5001';
+    private environmentApiUrl: string = 'http://localhost:5001';
 
-    constructor(backend: ConnectionBackend, defaultOptions: RequestOptions) {
+    constructor(backend: ConnectionBackend, defaultOptions: RequestOptions, @Inject(SessionService) private _sessionService: SessionService) {
         super(backend, defaultOptions);
     }
 
@@ -36,7 +37,7 @@ export class InterceptedHttp extends Http {
     }
 
     private updateUrl(req: string) {
-        if(req.startsWith("http")){
+        if (req.startsWith("http")) {
             return req;
         }
         return this.environmentApiUrl + req;
@@ -50,10 +51,13 @@ export class InterceptedHttp extends Http {
             options.headers = new Headers();
         }
         options.headers.append('Content-Type', 'application/json');
+        options.headers.append('Accept', 'application/json');
 
-        let jwt = localStorage['authorizationDataIdToken'];
-        if (jwt) {
-            options.headers.append('Authorization', 'Bearer ' + JSON.parse(jwt));
+        if (this._sessionService.isLoggedIn) {
+            var sessionInfo = this._sessionService.getSessionInfo();
+            if (sessionInfo) {
+                options.headers.append('Authorization', 'Bearer ' + sessionInfo.authorizationDataIdToken);
+            }
         }
         return options;
     }

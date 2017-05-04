@@ -2,7 +2,6 @@
 import { Http, Response, Headers } from '@angular/http';
 import { Injectable } from "@angular/core";
 import { Inject } from "@angular/core";
-import { SessionService } from "../../auth/services/session.service";
 
 //import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -10,7 +9,7 @@ import 'rxjs/add/operator/map';
 @Injectable()
 
 export class NotesService {
-    constructor( @Inject(SessionService) private session: SessionService, @Inject(Http) private http: Http) {
+    constructor( @Inject(Http) private http: Http) {
     }
     private notesUrl = '/api/values';  // URL to web API
 

@@ -18,14 +18,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
+var session_service_1 = require("../services/session.service");
 //import {environment} from "../environments/environment";
 var InterceptedHttp = (function (_super) {
     __extends(InterceptedHttp, _super);
-    function InterceptedHttp(backend, defaultOptions) {
+    function InterceptedHttp(backend, defaultOptions, _sessionService) {
         var _this = _super.call(this, backend, defaultOptions) || this;
+        _this._sessionService = _sessionService;
         _this.environmentApiUrl = 'http://localhost:5001';
         return _this;
     }
@@ -62,9 +67,10 @@ var InterceptedHttp = (function (_super) {
             options.headers = new http_1.Headers();
         }
         options.headers.append('Content-Type', 'application/json');
-        var jwt = localStorage['authorizationDataIdToken'];
-        if (jwt) {
-            options.headers.append('Authorization', 'Bearer ' + JSON.parse(jwt));
+        options.headers.append('Accept', 'application/json');
+        var sessionInfo = this._sessionService.getSessionInfo();
+        if (sessionInfo) {
+            options.headers.append('Authorization', 'Bearer ' + sessionInfo.authorizationDataIdToken);
         }
         return options;
     };
@@ -72,7 +78,8 @@ var InterceptedHttp = (function (_super) {
 }(http_1.Http));
 InterceptedHttp = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.ConnectionBackend, http_1.RequestOptions])
+    __param(2, core_1.Inject(session_service_1.SessionService)),
+    __metadata("design:paramtypes", [http_1.ConnectionBackend, http_1.RequestOptions, session_service_1.SessionService])
 ], InterceptedHttp);
 exports.InterceptedHttp = InterceptedHttp;
 //# sourceMappingURL=http.interceptor.js.map

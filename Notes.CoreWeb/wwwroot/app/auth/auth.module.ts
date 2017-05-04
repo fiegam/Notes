@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
 import { OidcSecurityService } from './services/oidc.security.service';
 import { AuthConfiguration } from './auth.configuration';
 import { OidcSecurityValidation } from './services/oidc.security.validation';
+import { SessionService } from './services/session.service';
+import { TempDataStore } from './services/tempData.store';
+import { InterceptedHttp } from './http/http.interceptor';
 
 @NgModule({
     imports: [
@@ -22,7 +25,10 @@ export class AuthModule {
             providers: [
                 OidcSecurityService,
                 OidcSecurityValidation,
-                AuthConfiguration
+                AuthConfiguration,
+                SessionService,
+                TempDataStore,
+                InterceptedHttp
             ]
         };
     }

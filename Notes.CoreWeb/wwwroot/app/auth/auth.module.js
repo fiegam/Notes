@@ -12,6 +12,9 @@ require("rxjs/add/operator/map");
 var oidc_security_service_1 = require("./services/oidc.security.service");
 var auth_configuration_1 = require("./auth.configuration");
 var oidc_security_validation_1 = require("./services/oidc.security.validation");
+var session_service_1 = require("./services/session.service");
+var tempData_store_1 = require("./services/tempData.store");
+var http_interceptor_1 = require("./http/http.interceptor");
 var AuthModule = AuthModule_1 = (function () {
     function AuthModule() {
     }
@@ -21,7 +24,10 @@ var AuthModule = AuthModule_1 = (function () {
             providers: [
                 oidc_security_service_1.OidcSecurityService,
                 oidc_security_validation_1.OidcSecurityValidation,
-                auth_configuration_1.AuthConfiguration
+                auth_configuration_1.AuthConfiguration,
+                session_service_1.SessionService,
+                tempData_store_1.TempDataStore,
+                http_interceptor_1.InterceptedHttp
             ]
         };
     };

@@ -17,14 +17,17 @@ var Rx_1 = require("rxjs/Rx");
 var router_1 = require("@angular/router");
 var auth_configuration_1 = require("../auth.configuration");
 var oidc_security_validation_1 = require("./oidc.security.validation");
+var session_service_1 = require("./session.service");
+var tempData_store_1 = require("./tempData.store");
 var OidcSecurityService = (function () {
-    function OidcSecurityService(_http, _configuration, _router) {
+    function OidcSecurityService(_http, _configuration, _router, _sessionService, _tempData) {
         var _this = this;
         this._http = _http;
         this._configuration = _configuration;
         this._router = _router;
+        this._sessionService = _sessionService;
+        this._tempData = _tempData;
         this.getUserData = function () {
-            _this.setHeaders();
             return _this._http.get(_this._configuration.userinfo_url, {
                 headers: _this.headers,
                 body: ''
@@ -34,15 +37,11 @@ var OidcSecurityService = (function () {
         this.headers = new http_1.Headers();
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Accept', 'application/json');
-        this.storage = localStorage;
-        if (this.retrieve('_isAuthorized') !== '') {
-            this.HasAdminRole = this.retrieve('HasAdminRole');
-            this._isAuthorized = this.retrieve('_isAuthorized');
-        }
+        this._isAuthorized = this._sessionService.getSessionInfo().isAuthorized;
     }
     OidcSecurityService.prototype.IsAuthorized = function () {
         if (this._isAuthorized) {
-            if (this.oidcSecurityValidation.IsTokenExpired(this.retrieve('authorizationDataIdToken'))) {
+            if (this.oidcSecurityValidation.IsTokenExpired(this._sessionService.getSessionInfo().authorizationDataIdToken)) {
                 console.log('IsAuthorized: isTokenExpired');
                 this.ResetAuthorizationData();
                 return false;
@@ -52,40 +51,27 @@ var OidcSecurityService = (function () {
         return false;
     };
     OidcSecurityService.prototype.GetToken = function () {
-        return this.retrieve('authorizationData');
+        return this._sessionService.getSessionInfo().authorizationData;
     };
     OidcSecurityService.prototype.ResetAuthorizationData = function () {
-        this.store('authorizationData', '');
-        this.store('authorizationDataIdToken', '');
+        this._sessionService.deleteSessionData();
         this._isAuthorized = false;
-        this.HasAdminRole = false;
-        this.store('HasAdminRole', false);
-        this.store('_isAuthorized', false);
     };
     OidcSecurityService.prototype.SetAuthorizationData = function (token, id_token) {
         var _this = this;
-        if (this.retrieve('authorizationData') !== '') {
-            this.store('authorizationData', '');
-        }
         console.log(token);
         console.log(id_token);
         console.log('storing to storage, getting the roles');
-        this.store('authorizationData', token);
-        this.store('authorizationDataIdToken', id_token);
+        this._sessionService.saveSessionData({
+            isAuthorized: true,
+            authorizationDataIdToken: id_token,
+            authorizationData: token,
+            user: null
+        });
         this._isAuthorized = true;
-        this.store('_isAuthorized', true);
         this.getUserData()
             .subscribe(function (data) { return _this.UserData = data; }, function (error) { return _this.HandleError(error); }, function () {
-            for (var i = 0; i < _this.UserData.role.length; i++) {
-                if (_this.UserData.role[i] === 'dataEventRecords.admin') {
-                    _this.HasAdminRole = true;
-                    _this.store('HasAdminRole', true);
-                }
-                if (_this.UserData.role[i] === 'admin') {
-                    _this.HasUserAdminRole = true;
-                    _this.store('HasUserAdminRole', true);
-                }
-            }
+            _this._sessionService.setCurrentUser({ name: 'name', email: 'email' });
         });
     };
     OidcSecurityService.prototype.Authorize = function () {
@@ -98,9 +84,9 @@ var OidcSecurityService = (function () {
         var scope = this._configuration.scope;
         var nonce = 'N' + Math.random() + '' + Date.now();
         var state = Date.now() + '' + Math.random();
-        this.store('authStateControl', state);
-        this.store('authNonce', nonce);
-        console.log('AuthorizedController created. adding myautostate: ' + this.retrieve('authStateControl'));
+        this._tempData.store('authStateControl', state);
+        this._tempData.store('authNonce', nonce);
+        console.log('AuthorizedController created. adding myautostate: ' + state);
         var url = authorizationUrl + '?' +
             'response_type=' + encodeURI(response_type) + '&' +
             'client_id=' + encodeURI(client_id) + '&' +
@@ -130,7 +116,7 @@ var OidcSecurityService = (function () {
             _this.jwtKeys = jwtKeys;
             if (!result.error) {
                 // validate state
-                if (_this.oidcSecurityValidation.ValidateStateFromHashCallback(result.state, _this.retrieve('authStateControl'))) {
+                if (_this.oidcSecurityValidation.ValidateStateFromHashCallback(result.state, _this._tempData.retrieve('authStateControl'))) {
                     token = result.access_token;
                     id_token = result.id_token;
                     var decoded = void 0;
@@ -140,15 +126,15 @@ var OidcSecurityService = (function () {
                     // validate jwt signature
                     if (_this.oidcSecurityValidation.Validate_signature_id_token(id_token, _this.jwtKeys)) {
                         // validate nonce
-                        if (_this.oidcSecurityValidation.Validate_id_token_nonce(decoded, _this.retrieve('authNonce'))) {
+                        if (_this.oidcSecurityValidation.Validate_id_token_nonce(decoded, _this._tempData.retrieve('authNonce'))) {
                             // validate iss
                             if (_this.oidcSecurityValidation.Validate_id_token_iss(decoded, _this._configuration.iss)) {
                                 // validate aud
                                 if (_this.oidcSecurityValidation.Validate_id_token_aud(decoded, _this._configuration.client_id)) {
                                     // valiadate at_hash and access_token
                                     if (_this.oidcSecurityValidation.Validate_id_token_at_hash(token, decoded.at_hash) || !token) {
-                                        _this.store('authNonce', '');
-                                        _this.store('authStateControl', '');
+                                        _this._tempData.store('authNonce', '');
+                                        _this._tempData.store('authStateControl', '');
                                         authResponseIsValid = true;
                                         console.log('AuthorizedCallback state, nonce, iss, aud, signature validated, returning token');
                                     }
@@ -178,7 +164,7 @@ var OidcSecurityService = (function () {
             }
             if (authResponseIsValid) {
                 _this.SetAuthorizationData(token, id_token);
-                console.log(_this.retrieve('authorizationData'));
+                console.log(token);
                 // router navigate to Main page
                 _this._router.navigate(['/']);
             }
@@ -192,7 +178,7 @@ var OidcSecurityService = (function () {
         // /connect/endsession?id_token_hint=...&post_logout_redirect_uri=https://myapp.com
         console.log('BEGIN Authorize, no auth data');
         var authorizationEndsessionUrl = this._configuration.logoutEndSession_url;
-        var id_token_hint = this.retrieve('authorizationDataIdToken');
+        var id_token_hint = this._sessionService.getSessionInfo().authorizationDataIdToken;
         var post_logout_redirect_uri = this._configuration.post_logout_redirect_uri;
         var url = authorizationEndsessionUrl + '?' +
             'id_token_hint=' + encodeURI(id_token_hint) + '&' +
@@ -238,30 +224,11 @@ var OidcSecurityService = (function () {
             this._router.navigate(['/Unauthorized']);
         }
     };
-    OidcSecurityService.prototype.retrieve = function (key) {
-        var item = this.storage.getItem(key);
-        if (item && item !== 'undefined') {
-            return JSON.parse(this.storage.getItem(key));
-        }
-        return;
-    };
-    OidcSecurityService.prototype.store = function (key, value) {
-        this.storage.setItem(key, JSON.stringify(value));
-    };
-    OidcSecurityService.prototype.setHeaders = function () {
-        this.headers = new http_1.Headers();
-        this.headers.append('Content-Type', 'application/json');
-        this.headers.append('Accept', 'application/json');
-        var token = this.GetToken();
-        if (token !== '') {
-            this.headers.append('Authorization', 'Bearer ' + token);
-        }
-    };
     return OidcSecurityService;
 }());
 OidcSecurityService = __decorate([
     core_1.Injectable(),
-    __metadata("design:paramtypes", [http_1.Http, auth_configuration_1.AuthConfiguration, router_1.Router])
+    __metadata("design:paramtypes", [http_1.Http, auth_configuration_1.AuthConfiguration, router_1.Router, session_service_1.SessionService, tempData_store_1.TempDataStore])
 ], OidcSecurityService);
 exports.OidcSecurityService = OidcSecurityService;
 //# sourceMappingURL=oidc.security.service.js.map

@@ -7,21 +7,33 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
-//@Injectable() specifies class is available to an injector for instantiation and an injector will display an error when trying to instantiate a class that is not marked as @Injectable()
 var SessionService = (function () {
     function SessionService() {
         this.isLoggedIn = false;
     }
-    SessionService.prototype.userLoggedin = function (user) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
+    SessionService.prototype.saveSessionData = function (sessionInfo) {
+        localStorage.setItem('sessionData', JSON.stringify(sessionInfo));
         this.isLoggedIn = true;
     };
-    SessionService.prototype.userLoggedout = function () {
-        localStorage.removeItem('currentUser');
-        this.isLoggedIn = false;
+    SessionService.prototype.deleteSessionData = function () {
+        localStorage.removeItem('sessionData');
+    };
+    SessionService.prototype.getSessionInfo = function () {
+        var data = localStorage.getItem('sessionData');
+        if (data) {
+            return JSON.parse(data);
+        }
+        else {
+            return {};
+        }
     };
     SessionService.prototype.getCurrentUser = function () {
-        return JSON.parse(localStorage.getItem("currentUser"));
+        return this.getSessionInfo().user;
+    };
+    SessionService.prototype.setCurrentUser = function (user) {
+        var data = this.getSessionInfo();
+        data.user = user;
+        this.saveSessionData(data);
     };
     return SessionService;
 }());

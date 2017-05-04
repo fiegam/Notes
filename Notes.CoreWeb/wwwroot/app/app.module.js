@@ -18,6 +18,7 @@ var auth_module_1 = require("./auth/auth.module");
 var oidc_security_service_1 = require("./auth/services/oidc.security.service");
 var app_routes_1 = require("./app.routes");
 var http_factory_1 = require("./auth/http/http.factory");
+var session_service_1 = require("./auth/services/session.service");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -33,8 +34,8 @@ AppModule = __decorate([
         providers: [oidc_security_service_1.OidcSecurityService, {
                 provide: http_1.Http,
                 useFactory: http_factory_1.httpFactory,
-                deps: [http_1.XHRBackend, http_1.RequestOptions]
-            }]
+                deps: [http_1.XHRBackend, http_1.RequestOptions, session_service_1.SessionService]
+            }, session_service_1.SessionService]
     })
 ], AppModule);
 exports.AppModule = AppModule;

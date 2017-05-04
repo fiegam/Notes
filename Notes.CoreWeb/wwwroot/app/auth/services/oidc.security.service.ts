@@ -7,92 +7,71 @@ import { Router } from '@angular/router';
 import { AuthConfiguration } from '../auth.configuration';
 import { OidcSecurityValidation } from './oidc.security.validation';
 import { JwtKeys } from './jwtkeys';
+import { SessionService } from './session.service';
+import { TempDataStore } from './tempData.store';
 
 @Injectable()
 export class OidcSecurityService {
 
-    public HasAdminRole: boolean;
-    public HasUserAdminRole: boolean;
     public UserData: any;
 
     private _isAuthorized: boolean;
     private headers: Headers;
-    private storage: any;
     private oidcSecurityValidation: OidcSecurityValidation;
 
     private errorMessage: string;
     private jwtKeys: JwtKeys;
 
-    constructor(private _http: Http, private _configuration: AuthConfiguration, private _router: Router) {
+    constructor(private _http: Http, private _configuration: AuthConfiguration, private _router: Router, private _sessionService: SessionService, private _tempData: TempDataStore) {
 
         this.oidcSecurityValidation = new OidcSecurityValidation();
 
         this.headers = new Headers();
         this.headers.append('Content-Type', 'application/json');
         this.headers.append('Accept', 'application/json');
-        this.storage = localStorage;
 
-        if (this.retrieve('_isAuthorized') !== '') {
-            this.HasAdminRole = this.retrieve('HasAdminRole');
-            this._isAuthorized = this.retrieve('_isAuthorized');
-        }
+        this._isAuthorized = this._sessionService.getSessionInfo().isAuthorized;
     }
 
     public IsAuthorized(): boolean {
         if (this._isAuthorized) {
-            if (this.oidcSecurityValidation.IsTokenExpired(this.retrieve('authorizationDataIdToken'))) {
+            if (this.oidcSecurityValidation.IsTokenExpired(this._sessionService.getSessionInfo().authorizationDataIdToken)) {
                 console.log('IsAuthorized: isTokenExpired');
                 this.ResetAuthorizationData();
                 return false;
             }
-
             return true;
         }
-
         return false;
     }
 
     public GetToken(): any {
-        return this.retrieve('authorizationData');
+        return this._sessionService.getSessionInfo().authorizationData;
     }
 
     public ResetAuthorizationData() {
-        this.store('authorizationData', '');
-        this.store('authorizationDataIdToken', '');
+        this._sessionService.deleteSessionData();
 
         this._isAuthorized = false;
-        this.HasAdminRole = false;
-        this.store('HasAdminRole', false);
-        this.store('_isAuthorized', false);
     }
 
     public SetAuthorizationData(token: any, id_token: any) {
-        if (this.retrieve('authorizationData') !== '') {
-            this.store('authorizationData', '');
-        }
-
         console.log(token);
         console.log(id_token);
         console.log('storing to storage, getting the roles');
-        this.store('authorizationData', token);
-        this.store('authorizationDataIdToken', id_token);
+        this._sessionService.saveSessionData({
+            isAuthorized: true,
+            authorizationDataIdToken: id_token,
+            authorizationData: token,
+            user: null
+        });
         this._isAuthorized = true;
-        this.store('_isAuthorized', true);
 
         this.getUserData()
             .subscribe(data => this.UserData = data,
             error => this.HandleError(error),
             () => {
-                for (let i = 0; i < this.UserData.role.length; i++) {
-                    if (this.UserData.role[i] === 'dataEventRecords.admin') {
-                        this.HasAdminRole = true;
-                        this.store('HasAdminRole', true);
-                    }
-                    if (this.UserData.role[i] === 'admin') {
-                        this.HasUserAdminRole = true;
-                        this.store('HasUserAdminRole', true);
-                    }
-                }
+                this._sessionService.setCurrentUser({ name: 'name', email: 'email' })
             });
     }
 
@@ -109,9 +88,9 @@ export class OidcSecurityService {
         let nonce = 'N' + Math.random() + '' + Date.now();
         let state = Date.now() + '' + Math.random();
 
-        this.store('authStateControl', state);
-        this.store('authNonce', nonce);
-        console.log('AuthorizedController created. adding myautostate: ' + this.retrieve('authStateControl'));
+        this._tempData.store('authStateControl', state);
+        this._tempData.store('authNonce', nonce);
+        console.log('AuthorizedController created. adding myautostate: ' + state);
 
         let url =
             authorizationUrl + '?' +
@@ -151,7 +130,7 @@ export class OidcSecurityService {
                 if (!result.error) {
 
                     // validate state
-                    if (this.oidcSecurityValidation.ValidateStateFromHashCallback(result.state, this.retrieve('authStateControl'))) {
+                    if (this.oidcSecurityValidation.ValidateStateFromHashCallback(result.state, this._tempData.retrieve('authStateControl'))) {
                         token = result.access_token;
                         id_token = result.id_token;
                         let decoded: any;
@@ -162,15 +141,15 @@ export class OidcSecurityService {
                         // validate jwt signature
                         if (this.oidcSecurityValidation.Validate_signature_id_token(id_token, this.jwtKeys)) {
                             // validate nonce
-                            if (this.oidcSecurityValidation.Validate_id_token_nonce(decoded, this.retrieve('authNonce'))) {
+                            if (this.oidcSecurityValidation.Validate_id_token_nonce(decoded, this._tempData.retrieve('authNonce'))) {
                                 // validate iss
                                 if (this.oidcSecurityValidation.Validate_id_token_iss(decoded, this._configuration.iss)) {
                                     // validate aud
                                     if (this.oidcSecurityValidation.Validate_id_token_aud(decoded, this._configuration.client_id)) {
                                         // valiadate at_hash and access_token
                                         if (this.oidcSecurityValidation.Validate_id_token_at_hash(token, decoded.at_hash) || !token) {
-                                            this.store('authNonce', '');
-                                            this.store('authStateControl', '');
+                                            this._tempData.store('authNonce', '');
+                                            this._tempData.store('authStateControl', '');
 
                                             authResponseIsValid = true;
                                             console.log('AuthorizedCallback state, nonce, iss, aud, signature validated, returning token');
@@ -196,7 +175,7 @@ export class OidcSecurityService {
 
                 if (authResponseIsValid) {
                     this.SetAuthorizationData(token, id_token);
-                    console.log(this.retrieve('authorizationData'));
+                    console.log(token);
 
                     // router navigate to Main page
                     this._router.navigate(['/']);
@@ -213,7 +192,7 @@ export class OidcSecurityService {
 
         let authorizationEndsessionUrl = this._configuration.logoutEndSession_url;
 
-        let id_token_hint = this.retrieve('authorizationDataIdToken');
+        let id_token_hint = this._sessionService.getSessionInfo().authorizationDataIdToken;
         let post_logout_redirect_uri = this._configuration.post_logout_redirect_uri;
 
         let url =
@@ -268,37 +247,10 @@ export class OidcSecurityService {
         }
     }
 
-    private retrieve(key: string): any {
-        let item = this.storage.getItem(key);
-
-        if (item && item !== 'undefined') {
-            return JSON.parse(this.storage.getItem(key));
-        }
-
-        return;
-    }
-
-    private store(key: string, value: any) {
-        this.storage.setItem(key, JSON.stringify(value));
-    }
-
     private getUserData = (): Observable<string[]> => {
-        this.setHeaders();
         return this._http.get(this._configuration.userinfo_url, {
             headers: this.headers,
             body: ''
         }).map(res => res.json());
-    }
-
-    private setHeaders() {
-        this.headers = new Headers();
-        this.headers.append('Content-Type', 'application/json');
-        this.headers.append('Accept', 'application/json');
-
-        let token = this.GetToken();
-
-        if (token !== '') {
-            this.headers.append('Authorization', 'Bearer ' + token);
-        }
     }
 }

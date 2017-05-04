@@ -1,26 +1,34 @@
-﻿import {Injectable} from "@angular/core";
-
-//@Injectable() specifies class is available to an injector for instantiation and an injector will display an error when trying to instantiate a class that is not marked as @Injectable()
+﻿import { Injectable } from "@angular/core";
 
 @Injectable()
-
 export class SessionService {
-    
-
-    public userLoggedin(user: User) {
-        localStorage.setItem('currentUser', JSON.stringify(user));
+    public saveSessionData(sessionInfo: SessionInfo): void {
+        localStorage.setItem('sessionData', JSON.stringify(sessionInfo));
         this.isLoggedIn = true;
     }
 
-    public userLoggedout() {
-        localStorage.removeItem('currentUser');
-        this.isLoggedIn = false;
+    public deleteSessionData() {
+        localStorage.removeItem('sessionData');
     }
 
     public isLoggedIn: Boolean = false;
 
-    public getCurrentUser(): User {
-        return JSON.parse(localStorage.getItem("currentUser"));
+    public getSessionInfo(): SessionInfo {
+        let data = localStorage.getItem('sessionData');
+        if (data) {
+            return JSON.parse(data);
+        }
+        else {
+            return <SessionInfo>{};
+        }
     }
 
+    public getCurrentUser(): User {
+        return this.getSessionInfo().user;
+    }
+    public setCurrentUser(user: User): void {
+        let data = this.getSessionInfo();
+        data.user = user;
+        this.saveSessionData(data);
+    }
 }

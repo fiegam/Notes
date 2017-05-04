@@ -1,12 +1,11 @@
 ﻿import { Component } from '@angular/core';
 import {Inject} from "@angular/core";
 import {NotesService} from "./services/NotesService";
-import {SessionService} from "../auth/services/session.service";
 
 @Component({
     selector: 'notes-body',
     templateUrl: 'app/notes/templates/notes.html',
-    providers: [NotesService, SessionService]
+    providers: [NotesService]
 })
 export class NotesComponent {
 

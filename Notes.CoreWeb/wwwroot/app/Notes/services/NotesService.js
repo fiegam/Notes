@@ -16,12 +16,10 @@ var Observable_1 = require("rxjs/Observable");
 var http_1 = require("@angular/http");
 var core_1 = require("@angular/core");
 var core_2 = require("@angular/core");
-var session_service_1 = require("../../auth/services/session.service");
 //import 'rxjs/add/operator/catch';
 require("rxjs/add/operator/map");
 var NotesService = (function () {
-    function NotesService(session, http) {
-        this.session = session;
+    function NotesService(http) {
         this.http = http;
         this.notesUrl = '/api/values'; // URL to web API
     }
@@ -51,8 +49,8 @@ var NotesService = (function () {
 }());
 NotesService = __decorate([
     core_1.Injectable(),
-    __param(0, core_2.Inject(session_service_1.SessionService)), __param(1, core_2.Inject(http_1.Http)),
-    __metadata("design:paramtypes", [session_service_1.SessionService, http_1.Http])
+    __param(0, core_2.Inject(http_1.Http)),
+    __metadata("design:paramtypes", [http_1.Http])
 ], NotesService);
 exports.NotesService = NotesService;
 //# sourceMappingURL=NotesService.js.map
