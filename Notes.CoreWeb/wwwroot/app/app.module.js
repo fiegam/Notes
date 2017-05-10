@@ -10,15 +10,17 @@ var core_1 = require("@angular/core");
 var platform_browser_1 = require("@angular/platform-browser");
 var ng_bootstrap_1 = require("@ng-bootstrap/ng-bootstrap");
 //import { HeaderComponent } from './header/header.component';
-var notes_component_1 = require("./Notes/notes.component");
+//import { NotesComponent } from './Notes/notes.component';
 var app_component_1 = require("./app.component");
-//import {NotesService} from "./Notes/services/NotesService";
+var not_found_component_1 = require("./not-found.component");
 var http_1 = require("@angular/http");
 var auth_module_1 = require("./auth/auth.module");
 var oidc_security_service_1 = require("./auth/services/oidc.security.service");
 var app_routes_1 = require("./app.routes");
 var http_factory_1 = require("./auth/http/http.factory");
 var session_service_1 = require("./auth/services/session.service");
+var router_1 = require("@angular/router");
+var notes_module_1 = require("./Notes/notes.module");
 var AppModule = (function () {
     function AppModule() {
     }
@@ -27,14 +29,15 @@ var AppModule = (function () {
 AppModule = __decorate([
     core_1.NgModule({
         imports: [ng_bootstrap_1.NgbModule.forRoot(), platform_browser_1.BrowserModule, http_1.HttpModule,
-            auth_module_1.AuthModule.forRoot(), app_routes_1.routing,
+            auth_module_1.AuthModule.forRoot(), app_routes_1.routing, notes_module_1.NotesModule
         ],
-        declarations: [app_component_1.AppComponent, notes_component_1.NotesComponent],
-        bootstrap: [app_component_1.AppComponent, notes_component_1.NotesComponent],
+        declarations: [app_component_1.AppComponent,
+            not_found_component_1.PageNotFoundComponent],
+        bootstrap: [app_component_1.AppComponent],
         providers: [oidc_security_service_1.OidcSecurityService, {
                 provide: http_1.Http,
                 useFactory: http_factory_1.httpFactory,
-                deps: [http_1.XHRBackend, http_1.RequestOptions, session_service_1.SessionService]
+                deps: [http_1.XHRBackend, http_1.RequestOptions, session_service_1.SessionService, router_1.Router]
             }, session_service_1.SessionService]
     })
 ], AppModule);

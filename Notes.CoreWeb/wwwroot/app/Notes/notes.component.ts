@@ -1,33 +1,39 @@
-﻿import { Component } from '@angular/core';
-import {Inject} from "@angular/core";
-import {NotesService} from "./services/NotesService";
+﻿import { Observable } from 'rxjs/Observable';
+import { Component, OnInit } from '@angular/core';
+import { Inject } from "@angular/core";
+import { NotesService } from "./services/NotesService";
 
 @Component({
-    selector: 'notes-body',
+    //selector: 'notes-body',
     templateUrl: 'app/notes/templates/notes.html',
     providers: [NotesService]
 })
-export class NotesComponent {
+export class NotesComponent implements OnInit {
 
-    public notes: Note[] = [];
+    public notes: Note[];
 
     test = 'test string';
     testNote = [{
         title: 'Note1',
         body: 'Body1'
     }, {
-            title: 'Note2',
-            body: 'Body2'
-        }
+        title: 'Note2',
+        body: 'Body2'
+    }
     ];
 
-     
+    constructor( @Inject(NotesService) private _notesService: NotesService) {
+        this.notes =this.testNote;
+    }
 
-    constructor( @Inject(NotesService) private notesService: NotesService) {
-        notesService.GetNotes().subscribe(
+    private reload(): void {
+        this._notesService.GetNotes().subscribe(
             notes => {
                 this.notes = notes;
             });
+    }
+
+    ngOnInit(): void {
 
     }
 }

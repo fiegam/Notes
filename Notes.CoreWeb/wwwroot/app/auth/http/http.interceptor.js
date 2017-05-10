@@ -18,19 +18,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var http_1 = require("@angular/http");
+var Rx_1 = require("rxjs/Rx");
 var session_service_1 = require("../services/session.service");
+var router_1 = require("@angular/router");
+var _ = require("lodash");
 //import {environment} from "../environments/environment";
 var InterceptedHttp = (function (_super) {
     __extends(InterceptedHttp, _super);
-    function InterceptedHttp(backend, defaultOptions, _sessionService) {
+    function InterceptedHttp(backend, defaultOptions, _sessionService, _router) {
         var _this = _super.call(this, backend, defaultOptions) || this;
         _this._sessionService = _sessionService;
+        _this._router = _router;
         _this.environmentApiUrl = 'http://localhost:5001';
         return _this;
     }
@@ -39,19 +40,19 @@ var InterceptedHttp = (function (_super) {
     };
     InterceptedHttp.prototype.get = function (url, options) {
         url = this.updateUrl(url);
-        return _super.prototype.get.call(this, url, this.getRequestOptionArgs(options));
+        return this.intercept(_super.prototype.get.call(this, url, this.getRequestOptionArgs(options)));
     };
     InterceptedHttp.prototype.post = function (url, body, options) {
         url = this.updateUrl(url);
-        return _super.prototype.post.call(this, url, body, this.getRequestOptionArgs(options));
+        return this.intercept(_super.prototype.post.call(this, url, body, this.getRequestOptionArgs(options)));
     };
     InterceptedHttp.prototype.put = function (url, body, options) {
         url = this.updateUrl(url);
-        return _super.prototype.put.call(this, url, body, this.getRequestOptionArgs(options));
+        return this.intercept(_super.prototype.put.call(this, url, body, this.getRequestOptionArgs(options)));
     };
     InterceptedHttp.prototype.delete = function (url, options) {
         url = this.updateUrl(url);
-        return _super.prototype.delete.call(this, url, this.getRequestOptionArgs(options));
+        return this.intercept(_super.prototype.delete.call(this, url, this.getRequestOptionArgs(options)));
     };
     InterceptedHttp.prototype.updateUrl = function (req) {
         if (req.startsWith("http")) {
@@ -68,18 +69,31 @@ var InterceptedHttp = (function (_super) {
         }
         options.headers.append('Content-Type', 'application/json');
         options.headers.append('Accept', 'application/json');
-        var sessionInfo = this._sessionService.getSessionInfo();
-        if (sessionInfo) {
-            options.headers.append('Authorization', 'Bearer ' + sessionInfo.authorizationDataIdToken);
+        if (this._sessionService.isLoggedIn) {
+            var sessionInfo = this._sessionService.getSessionInfo();
+            if (sessionInfo) {
+                options.headers.append('Authorization', 'Bearer ' + sessionInfo.authorizationDataIdToken);
+            }
         }
         return options;
+    };
+    InterceptedHttp.prototype.intercept = function (observable) {
+        var _this = this;
+        return observable.catch(function (err, source) {
+            if (err.status == 401 && !_.endsWith(err.url, 'api/auth/login')) {
+                _this._sessionService.deleteSessionData();
+                return Rx_1.Observable.empty();
+            }
+            else {
+                return Rx_1.Observable.throw(err);
+            }
+        });
     };
     return InterceptedHttp;
 }(http_1.Http));
 InterceptedHttp = __decorate([
     core_1.Injectable(),
-    __param(2, core_1.Inject(session_service_1.SessionService)),
-    __metadata("design:paramtypes", [http_1.ConnectionBackend, http_1.RequestOptions, session_service_1.SessionService])
+    __metadata("design:paramtypes", [http_1.ConnectionBackend, http_1.RequestOptions, session_service_1.SessionService, router_1.Router])
 ], InterceptedHttp);
 exports.InterceptedHttp = InterceptedHttp;
 //# sourceMappingURL=http.interceptor.js.map

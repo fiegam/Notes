@@ -35,11 +35,7 @@ gulp.task('restore:rxjs', function () {
         'node_modules/rxjs/**/*.js'
     ]).pipe(gulp.dest(libs + 'rxjs'));
 });
-gulp.task('restore:angular-in-memory-web-api', function () {
-    gulp.src([
-        'node_modules/angular-in-memory-web-api/**/*.js'
-    ]).pipe(gulp.dest(libs + 'angular-in-memory-web-api'));
-});
+
 
 gulp.task('restore:angular', function () {
     gulp.src([
@@ -96,7 +92,6 @@ gulp.task('restore', [
     'restore:reflect-metadata',
     'restore:systemjs',
     'restore:rxjs',
-    'restore:angular-in-memory-web-api',
     'restore:angular',
     'restore:bootstrap',
     'restore:oidc-client',

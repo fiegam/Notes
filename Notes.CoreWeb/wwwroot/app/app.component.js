@@ -11,14 +11,18 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 var core_1 = require("@angular/core");
 var oidc_security_service_1 = require("./auth/services/oidc.security.service");
+var session_service_1 = require("./auth/services/session.service");
 //import { NotesComponent } from './Notes/notes.component';
 //import { HeaderComponent } from './header/header.component';
 //import { UnauthorizedComponent } from './unauthorized/unauthorized.component';
 //import { SecureFilesComponent } from './securefile/securefiles.component';
 //import './app.component.css';
 var AppComponent = (function () {
-    function AppComponent(securityService) {
+    function AppComponent(securityService, _sessionService) {
+        var _this = this;
         this.securityService = securityService;
+        this._sessionService = _sessionService;
+        this._sessionService.unauthorized.subscribe(function () { return _this.Login(); });
     }
     AppComponent.prototype.ngOnInit = function () {
         console.log('ngOnInit _securityService.AuthorizedCallback');
@@ -39,9 +43,9 @@ var AppComponent = (function () {
 AppComponent = __decorate([
     core_1.Component({
         selector: 'my-app',
-        templateUrl: 'app/app.component.html'
+        templateUrl: 'app/app.component.html',
     }),
-    __metadata("design:paramtypes", [oidc_security_service_1.OidcSecurityService])
+    __metadata("design:paramtypes", [oidc_security_service_1.OidcSecurityService, session_service_1.SessionService])
 ], AppComponent);
 exports.AppComponent = AppComponent;
 //# sourceMappingURL=app.component.js.map

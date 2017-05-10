@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 
 import { OidcSecurityService } from './auth/services/oidc.security.service';
+import { SessionService } from './auth/services/session.service';
 
 //import { NotesComponent } from './Notes/notes.component';
 //import { HeaderComponent } from './header/header.component';
@@ -14,15 +15,16 @@ import { OidcSecurityService } from './auth/services/oidc.security.service';
 
 @Component({
     selector: 'my-app',
-    templateUrl: 'app/app.component.html'
+    templateUrl: 'app/app.component.html',
 })
 
 export class AppComponent implements OnInit {
 
-    constructor(public securityService: OidcSecurityService) {
+    constructor(public securityService: OidcSecurityService, private _sessionService: SessionService) {
+        this._sessionService.unauthorized.subscribe(()=>this.Login())
     }
 
-    ngOnInit() {
+    ngOnInit(): void {
         console.log('ngOnInit _securityService.AuthorizedCallback');
 
         if (window.location.hash) {

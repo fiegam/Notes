@@ -26,21 +26,22 @@ namespace Notes.CoreWeb
             }
 
             RegisterNodeModulesProvider(app, env);
-            //RegisterLibsProvider(app, env);
+            RegisterLibsProvider(app, env);
             //RegisterNestedNodeModulesProvider(app, env);
             //RegisterAppFilesProvider(app, env);
             app.UseDefaultFiles();
 
+            //Support angular routing
             app.Use(async (context, next) =>
             {
                 await next();
 
-                //if (context.Response.StatusCode == 404
-                //    && !Path.HasExtension(context.Request.Path.Value))
-                //{
-                //    context.Request.Path = "/index.html";
-                //    await next();
-                //}
+                if (context.Response.StatusCode == 404
+                    && !Path.HasExtension(context.Request.Path.Value))
+                {
+                    context.Request.Path = "/index.html";
+                    await next();
+                }
             });
 
             app.UseStaticFiles();

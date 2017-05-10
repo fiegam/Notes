@@ -16,10 +16,8 @@ var core_1 = require("@angular/core");
 var core_2 = require("@angular/core");
 var NotesService_1 = require("./services/NotesService");
 var NotesComponent = (function () {
-    function NotesComponent(notesService) {
-        var _this = this;
-        this.notesService = notesService;
-        this.notes = [];
+    function NotesComponent(_notesService) {
+        this._notesService = _notesService;
         this.test = 'test string';
         this.testNote = [{
                 title: 'Note1',
@@ -29,15 +27,21 @@ var NotesComponent = (function () {
                 body: 'Body2'
             }
         ];
-        notesService.GetNotes().subscribe(function (notes) {
+        this.notes = this.testNote;
+    }
+    NotesComponent.prototype.reload = function () {
+        var _this = this;
+        this._notesService.GetNotes().subscribe(function (notes) {
             _this.notes = notes;
         });
-    }
+    };
+    NotesComponent.prototype.ngOnInit = function () {
+    };
     return NotesComponent;
 }());
 NotesComponent = __decorate([
     core_1.Component({
-        selector: 'notes-body',
+        //selector: 'notes-body',
         templateUrl: 'app/notes/templates/notes.html',
         providers: [NotesService_1.NotesService]
     }),
