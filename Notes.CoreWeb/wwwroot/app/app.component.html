@@ -1,32 +1,22 @@
 <div class="container" style="margin-top: 15px;">
     <!-- Static navbar -->
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <button aria-controls="navbar" aria-expanded="false" data-target="#navbar" data-toggle="collapse" class="navbar-toggle" type="button">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#">Brand</a>
-            </div>
-            <div class="navbar-collapse" id="navbar">
-                <ul class="nav navbar-nav">
-                    
-                    <li><a class="navigationLinkButton" *ngIf="!securityService.IsAuthorized()" (click)="Login()">Login</a></li>
-                    <li><a class="navigationLinkButton" *ngIf="securityService.IsAuthorized()" (click)="Logout()">Logout</a></li>
-              
-                </ul>
-            </div><!--/.nav-collapse -->
-        </div><!--/.container-fluid -->
-    </nav>
-<!--<a class="navigationLinkButton" *ngIf="!securityService.IsAuthorized()" (click)="Login()">Login</a>
-<a class="navigationLinkButton" *ngIf="securityService.IsAuthorized()" (click)="Logout()">Logout</a>-->
-   <!--<notes-header>Loading header...</notes-header>-->
-    <!--<notes-body>Loading body...</notes-body>-->
-    <!--<notes-footer>Loading footer...</notes-footer>-->
-    
-    <router-outlet></router-outlet>
 
+    <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+        <button class="navbar-toggler navbar-toggler-right" type="button" (click)="isNavbarCollapsed = !isNavbarCollapsed"
+                aria-controls="exCollapsingNavbar2" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <a class="navbar-brand" routerLink="/notes">Notes</a>
+        <div [ngbCollapse]="isNavbarCollapsed" class="collapse navbar-collapse" id="exCollapsingNavbar2">
+            <ul class="navbar-nav mr-auto">
+                <li><a class="nav-item nav-link" routerLink="/create" routerLinkActive="active">Create new</a></li>
+            </ul>
+            <div class="navbar-nav my-2 my-md-0">
+                <a class="navigationLinkButton" *ngIf="!securityService.IsAuthorized()" (click)="Login()">Login</a>
+                <a class="navigationLinkButton" *ngIf="securityService.IsAuthorized()" (click)="Logout()">Logout</a>
+            </div>
+        </div>
+    </nav>
+
+    <router-outlet></router-outlet>
 </div>
